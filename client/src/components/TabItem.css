@@ -1,0 +1,7 @@
+#item-container {
+    width: 300px;
+    height: 100px;
+    background-color: lightskyblue;
+    border-radius: 5px;
+    border: solid 2px;
+}
