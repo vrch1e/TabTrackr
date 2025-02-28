@@ -1,9 +1,9 @@
 import { Sequelize } from 'sequelize';
 
-const sequelize = new Sequelize('TabTrackr', 'postgres', 'OrangeFire393.', {
+const sequelize = new Sequelize('too lazy to add a .env file right now, but pretend this is username password etc', {
     host: 'localhost',
     dialect: 'postgres',
-    logging: false, // Set to true if you want SQL queries to be logged in the console
+    logging: false,
 });
 
 export default sequelize
