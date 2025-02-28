@@ -1,4 +1,4 @@
-import TimeTracking from "../model/model";
+import TimeTracking from "../model/model.js";
 import { Op } from 'sequelize'
 
 const getStats = async (req, res) => {
@@ -10,12 +10,12 @@ const getStats = async (req, res) => {
     } else if (period === 'week') {
         timeFrame = new Date(new Date() - 7 * 24 * 60 * 60 * 1000)
     } else if (period === 'month') {
-        timeFrame = new Date(new Date() - 30 * 7 * 24 * 60 * 60 * 1000)
+        timeFrame = new Date(new Date() - 30 * 24 * 60 * 60 * 1000)
     }
 
     const visits = await TimeTracking.findAll({
         where: {
-            timestamp: {
+            createdAt: {
                 [Op.gte]: timeFrame
             }
         }
