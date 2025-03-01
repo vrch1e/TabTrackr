@@ -10,6 +10,7 @@ function App() {
     const fetchSites = async () => {
       const data = await services.getSites('today')
       setTabsToday(data)
+      console.log('re-rendered')
     }
     const intervalId = setInterval(fetchSites, 30000)
     return () => clearInterval(intervalId)
