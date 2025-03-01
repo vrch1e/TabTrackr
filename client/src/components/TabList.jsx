@@ -7,7 +7,7 @@ export default function TabList({ tabs }) {
         <>
         <div id='container'>
             {tabs.map((tab) => (
-                <TabItem key={tab.id} website={tab.site}></TabItem>
+                <TabItem key={tab.id} website={tab.site} timespent={tab.timespent}></TabItem>
             ))}
         </div>
         </>

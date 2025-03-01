@@ -1,8 +1,20 @@
-import { useState } from 'react'
-import TabItem from './components/TabItem'
+import { useState, useEffect } from 'react'
+import services from './services/services';
+import TabList from './components/TabList';
 import './App.css'
 
 function App() {
+  const [tabsToday, setTabsToday] = useState([])
+
+  useEffect(() => {
+    const fetchSites = async () => {
+      const data = await services.getSites('today')
+      setTabsToday(data)
+    }
+    const intervalId = setInterval(fetchSites, 30000)
+    return () => clearInterval(intervalId)
+
+  }, [])
 
   return (
     <>
@@ -13,7 +25,7 @@ function App() {
         <button>Month</button>
         <button id='manage-btn'>Manage Sites</button>
       </div>
-      <TabItem website='test.com'/>
+      <TabList tabs={tabsToday} />
     </div>
     </>
   )

@@ -1,11 +1,12 @@
 import './TabItem.css'
 
-export default function TabItem({website}) {
+export default function TabItem({ website, timespent }) {
 
     return (
         <>
         <div id='item-container'>
-            <h4>{website}</h4>
+            <h2>{website}</h2>
+            <h2>{timespent}</h2>
         </div>
         </>
     )
