@@ -7,7 +7,7 @@ export default function TabList({ tabs = [] }) {
         <div id='container'>
             {tabs.length > 0 ? (
                 tabs.map((tab) => (
-                    <TabItem key={tab.id} website={tab.site} timespent={tab.timespent} />
+                    <TabItem key={tab.id} site={tab.site} timespent={tab.timespent} />
                 ))
             ) : (
                 <p>No tracked data available.</p>

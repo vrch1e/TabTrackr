@@ -25,14 +25,15 @@ const getStats = async (req, res) => {
 }
 
 const logVisit = async (req, res) => {
-    const { site, timespent } = req.body;
+    const visits = req.body.usage;
 
-    const visit = await TimeTracking.create({
-        site,
-        timespent
-    })
-    res.status(201).json(visit)
-}
+    if (!Array.isArray(visits)) {
+        return res.status(400).json({ error: "Expected an array of visits" });
+    }
+
+    const createdVisits = await TimeTracking.bulkCreate(visits);
+    res.status(201).json(createdVisits);
+};
 
 const clearAll = async (req, res) => {
     await TimeTracking.destroy({

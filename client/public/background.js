@@ -1,0 +1,59 @@
+let activeTabId = null;
+let tabStartTime = null;
+let tabUsage = {};
+
+function updateTabUsage(tabId) {
+    console.log('updateTabUsage has been called with: ', tabId)
+
+    if (activeTabId !== null && tabStartTime !== null) {
+        const timeSpent = Date.now() - tabStartTime;
+
+        chrome.tabs.get(activeTabId, (tab) => {
+        if (chrome.runtime.lastError || !tab || !tab.url) return;
+
+        const site = new URL(tab.url).hostname;
+        tabUsage[site] = (tabUsage[site] || 0) + timeSpent;
+        });
+    }
+
+    activeTabId = tabId;
+    tabStartTime = Date.now();
+}
+
+chrome.tabs.onActivated.addListener((activeInfo) => {
+    updateTabUsage(activeInfo.tabId);
+});
+
+chrome.windows.onFocusChanged.addListener((windowId) => {
+    if (windowId === chrome.windows.WINDOW_ID_NONE) {
+        updateTabUsage(null); // Save time when the window loses focus
+    } else {
+        chrome.tabs.query({ active: true, windowId }, (tabs) => {
+        if (tabs.length > 0) {
+            updateTabUsage(tabs[0].id);
+        }
+    });
+  }
+});
+
+// Send usage data every 10 seconds
+setInterval(() => {
+  if (Object.keys(tabUsage).length > 0) {
+    const usageData = Object.entries(tabUsage).map(([site, timespent]) => ({
+      site,
+      timespent,
+    }));
+
+    console.log("Sending tabUsage:", tabUsage);
+
+    fetch("http://localhost:3000/visits", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ usage: usageData }),
+    })
+      .then(() => {
+        tabUsage = {};
+      })
+      .catch(console.error);
+  }
+}, 10000);

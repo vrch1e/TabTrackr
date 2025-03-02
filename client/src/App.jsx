@@ -9,10 +9,12 @@ function App() {
   useEffect(() => {
     const fetchSites = async () => {
       const data = await services.getSites('today')
+      console.log('data: ', data)
       setTabsToday(data)
       console.log('re-rendered')
     }
-    const intervalId = setInterval(fetchSites, 30000)
+    fetchSites()
+    const intervalId = setInterval(fetchSites, 10000)
     return () => clearInterval(intervalId)
 
   }, [])

@@ -9,6 +9,7 @@ const getSites = async (period) => {
     
         const json = await response.json();
         console.log(json);
+        return json;
     } catch (error) {
         console.error(error.message);
     }
@@ -33,6 +34,7 @@ const logVisit = async (site, timespent) => {
   
         const json = await response.json();
         console.log(json);
+        return json;
     } catch (error) {
         console.log(error.message)
     }
