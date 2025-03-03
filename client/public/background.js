@@ -1,22 +1,24 @@
 let activeTabId = null;
 let tabStartTime = null;
-let tabUsage = {};
+let tabUsage = {}; //sent to db & cleared every 10 secs
 
+// updates the tabUsage object with the time spent on the active tab
 function updateTabUsage(tabId) {
     console.log('updateTabUsage has been called with: ', tabId)
 
     if (activeTabId !== null && tabStartTime !== null) {
-        const timeSpent = Date.now() - tabStartTime;
+        const timeSpent = Date.now() - tabStartTime
 
         chrome.tabs.get(activeTabId, (tab) => {
         if (chrome.runtime.lastError || !tab || !tab.url) return;
 
-        const site = new URL(tab.url).hostname;
-        tabUsage[site] = (tabUsage[site] || 0) + timeSpent;
+        const site = new URL(tab.url).hostname
+        tabUsage[site] = (tabUsage[site] || 0) + timeSpent
         });
     }
-
-    activeTabId = tabId;
+    
+    // after first interval, these will be updated so tabUsage can be filled
+    activeTabId = tabId; 
     tabStartTime = Date.now();
 }
 
@@ -24,9 +26,9 @@ chrome.tabs.onActivated.addListener((activeInfo) => {
     updateTabUsage(activeInfo.tabId);
 });
 
-chrome.windows.onFocusChanged.addListener((windowId) => {
+chrome.windows.onFocusChanged.addListener((windowId) => {   // lines 28 to 38 is ai code. Used to account for if the user switches windows
     if (windowId === chrome.windows.WINDOW_ID_NONE) {
-        updateTabUsage(null); // Save time when the window loses focus
+        updateTabUsage(null);
     } else {
         chrome.tabs.query({ active: true, windowId }, (tabs) => {
         if (tabs.length > 0) {
@@ -36,7 +38,7 @@ chrome.windows.onFocusChanged.addListener((windowId) => {
   }
 });
 
-// Send usage data every 10 seconds
+//send usage data to db every 10 seconds - maybe this is too often? I'm not sure how taxing this operation is on performance
 setInterval(() => {
   if (Object.keys(tabUsage).length > 0) {
     const usageData = Object.entries(tabUsage).map(([site, timespent]) => ({
@@ -54,6 +56,10 @@ setInterval(() => {
       .then(() => {
         tabUsage = {};
       })
-      .catch(console.error);
+      .catch((error) => {
+        console.error("Error sending usage data:", error);
+      });
   }
 }, 10000);
+
+console.log("Background script is running");

@@ -21,10 +21,6 @@
         "<all_urls>"
     ],
     "background": {
-        "service-worker": "background.js"
-    },
-    "content_scripts": [{
-        "matches": ["<all_urls>"],
-        "js": ["content.js"]
-    }]
+        "service_worker": "background.js"
+    }
 }
