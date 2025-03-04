@@ -28,6 +28,7 @@ function App() {
         <Buttons />
         <button id='manage-btn'>Manage Sites</button>
       </div>
+      <hr></hr>
       <TabList tabs={tabsToday} />
     </div>
     </>
