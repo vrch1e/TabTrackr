@@ -22,4 +22,17 @@ TimeTracking.sync({ alter: true })
   .then(() => console.log('TimeTracking model synchronized with the database'))
   .catch((err) => console.log('Error syncing TimeTracking model:', err));
 
-export default TimeTracking;
+const Watchlist = sequelize.define('Watchlist', {
+  site: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true
+  },
+  timeLimit: {
+    type: DataTypes.INTEGER, // Time limit in milliseconds
+    allowNull: false
+  }
+});
+
+export {TimeTracking, Watchlist};
+

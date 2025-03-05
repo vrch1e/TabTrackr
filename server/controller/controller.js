@@ -1,4 +1,4 @@
-import TimeTracking from "../model/model.js";
+import { TimeTracking, Watchlist } from "../model/model.js";
 import sequelize from "../config/database.js";
 import { Op } from 'sequelize'
 
@@ -55,6 +55,10 @@ const logVisit = async (req, res) => {
     res.status(201).json({ msg: "Visits logged" });
 };
 
+const getWatchlist = async (req, res) => {
+    const watchlist = await Watchlist.findAll({ raw: true });
+    res.status(200).json(watchlist);
+};
 
 const clearAll = async (req, res) => {
     await TimeTracking.destroy({
@@ -63,4 +67,4 @@ const clearAll = async (req, res) => {
     res.json({ msg: "all data deleted" })
 }
 
-export default { getStats, logVisit, clearAll }
+export default { getStats, logVisit, getWatchlist, clearAll }
