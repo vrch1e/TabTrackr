@@ -26,7 +26,6 @@ function App() {
       <div id='dashboard'>
         <h1>Time Tracked: {selectedPeriod}</h1>
         <Buttons />
-        <button id='manage-btn'>Manage Sites</button>
       </div>
       <hr></hr>
       <TabList tabs={tabsToday} />

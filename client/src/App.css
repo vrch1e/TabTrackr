@@ -4,6 +4,8 @@
   height: 500px;
   width: 400px;
   background-color: #caf0f8;
+  overflow-y: auto; /* Enables vertical scrolling */
+  scrollbar-width: none; /* Hides scrollbar in Firefox */
 }
 
 #dashboard {
@@ -28,20 +30,12 @@ button {
   background-color: #90e0ef;
 }
 
-#manage-btn {
-  width: 70px;
-  height: 40px;
-  margin-left: 30px;
-  border-radius: 3px;
-  background-color: #90e0ef;
-}
-
 hr {
   display: block;
   height: 3px;
   width: 400px;
   border: 0;
   border-top: 1px solid #0077b6;
-  margin: 1em 0;
+  margin-top: 1em 0;
   padding: 0;
 }
