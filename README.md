@@ -9,7 +9,11 @@ The manifest.json file is responsible for providing metadata to the browser, e.g
 FOR USE:
 
 1: Fork and clone the repo
+
 2: In the client folder, run 'npm install'. Then 'npm run build'.
+
 3: In the server folder, run 'npm install'. Then 'nodemon server.js'.
+
 4: Go to chrome://extensions/ in the browser, and click 'load unpacked' in the top left.
+
 5: Turn the extension on and you should see the extension running without errors.
