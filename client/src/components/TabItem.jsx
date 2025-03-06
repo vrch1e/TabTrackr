@@ -2,7 +2,7 @@ import './TabItem.css'
 
 export default function TabItem({ site, timespent }) {
 
-    return (
+    return ( //  todo: unnecesary fragment
         <>
         <div id='item-container'>
             <h2>{site}</h2>

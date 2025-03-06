@@ -1,4 +1,4 @@
-import { DataTypes } from 'sequelize';
+import { DataTypes } from 'sequelize'; // unused?
 import sequelize from '../config/database.js';
 
 const TimeTracking = sequelize.define('TimeTracking', {

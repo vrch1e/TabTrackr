@@ -2,6 +2,7 @@ let activeTabId = null;
 let activeTabUrl = null; // Hostname of the active tab
 let lastTick = Date.now();
 let tabUsage = {}; // Accumulates usage per site
+// todo: const?
 
 // Record elapsed time for the current active tab
 function recordUsage() {
@@ -20,16 +21,18 @@ function updateActiveTab(newTabId) {
   recordUsage();
   activeTabId = newTabId;
   if (newTabId !== null) {
-    chrome.tabs.get(newTabId, (tab) => {
+    // todo: check .get / log chrome.tabs
+    chrome.tabs.get(newTabId, (tab) => { // todo: remove braces
       if (chrome.runtime.lastError || !tab || !tab.url) {
         activeTabUrl = null;
       } else {
         activeTabUrl = new URL(tab.url).hostname;
+        // todo: log (tab.url, new URL and .hostname)
         console.log(`Switched to tab ${newTabId}: ${activeTabUrl}`);
       }
     });
   } else {
-    activeTabUrl = null;
+    activeTabUrl = null; // todo: merge with first  =null assignment?
     console.log("No active tab");
   }
 }
@@ -44,13 +47,15 @@ chrome.windows.onFocusChanged.addListener((windowId) => {
   if (windowId === chrome.windows.WINDOW_ID_NONE) {
     updateActiveTab(null); // Browser lost focus
   } else {
+    // todo: check tabs.query
     chrome.tabs.query({ active: true, windowId }, (tabs) => {
-      if (tabs.length > 0) {
+      if (tabs.length > 0) { // todo: works without condition?
         updateActiveTab(tabs[0].id);
       }
     });
   }
 });
+
 
 // Listen for url changes within the active tab
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
@@ -69,6 +74,7 @@ chrome.tabs.onRemoved.addListener((tabId) => {
   }
 });
 
+// todo: remove cause unnec.
 //record usage every second
 setInterval(recordUsage, 1000);
 
@@ -80,7 +86,7 @@ setInterval(() => {
     const usageData = Object.entries(tabUsage).map(([site, timespent]) => ({
       site,
       timespent,
-    }));
+    })); // todo: remove unnec. braces around argument
     console.log("Sending tabUsage:", usageData);
     fetch("http://localhost:3000/visits", {
       method: "POST",

@@ -4,14 +4,15 @@ import { Op } from 'sequelize'
 
 const getStats = async (req, res) => {
     const { period } = req.params;
+    // todo: const dayInMs = 24 * 60 * 60 * 1000;
     let timeFrame;
 
     if (period === 'today') {
-        timeFrame = new Date(new Date() - 24 * 60 * 60 * 1000);
+        timeFrame = new Date(new Date() - 24 * 60 * 60 * 1000); // todo: improve?
     } else if (period === 'week') {
-        timeFrame = new Date(new Date() - 7 * 24 * 60 * 60 * 1000);
+        timeFrame = new Date(new Date() - 7 * 24 * 60 * 60 * 1000); // todo: improve?
     } else if (period === 'month') {
-        timeFrame = new Date(new Date() - 30 * 24 * 60 * 60 * 1000);
+        timeFrame = new Date(new Date() - 30 * 24 * 60 * 60 * 1000); // todo: improve?
     } else {
         return res.status(400).json({ error: "Invalid period" });
     }
