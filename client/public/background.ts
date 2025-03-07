@@ -1,13 +1,13 @@
-let activeTabId = null;
-let activeTabUrl = null; // Hostname of the active tab
-let lastTick = Date.now();
-let tabUsage = {}; // Accumulates usage per site
+let activeTabId: number = null;
+let activeTabUrl: string = ''; // Hostname of the active tab
+let lastTick: number = Date.now();
+let tabUsage: object = {}; // Accumulates usage per site
 // todo: const?
 
 // Record elapsed time for the current active tab
 function recordUsage() {
-  const now = Date.now();
-  const elapsed = now - lastTick;
+  const now: number = Date.now();
+  const elapsed: number = now - lastTick;
   lastTick = now;
   if (activeTabId !== null && activeTabUrl) {
     tabUsage[activeTabUrl] = (tabUsage[activeTabUrl] || 0) + elapsed;
@@ -16,13 +16,13 @@ function recordUsage() {
 }
 
 // Update the active tab and record any pending time from the previous tab
-function updateActiveTab(newTabId) {
+function updateActiveTab(newTabId: number) {
   // Record any usage from the previous active tab
   recordUsage();
   activeTabId = newTabId;
   if (newTabId !== null) {
     // todo: check .get / log chrome.tabs
-    chrome.tabs.get(newTabId, (tab) => { // todo: remove braces
+    chrome.tabs.get(newTabId, (tab: Object) => { // todo: remove braces
       if (chrome.runtime.lastError || !tab || !tab.url) {
         activeTabUrl = null;
       } else {
