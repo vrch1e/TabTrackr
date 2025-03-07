@@ -1,23 +1,26 @@
 
 import { useState, useEffect } from 'react'
-import services from './services/services';
-import TabList from './components/TabList';
-import './App.css'
+import services from './services/services.js';
+import TabList from './components/TabList.js';
+import { Visit } from '../../types.js';
+// @ts-ignore
+import './App.css';
 
 function App() {
-  const [tabsToday, setTabsData] = useState([])
-  const [selectedPeriod, setSelectedPeriod] = useState('today')
+
+  const [tabsToday, setTabsData] = useState<Visit[]>([]);
+  const [selectedPeriod, setSelectedPeriod] = useState<string>('today')
 
   useEffect(() => {
     const fetchSites = async () => {
-      const data = await services.getSites(selectedPeriod) // todo: services. for readability ?
+      const data: Visit[] = await services.getSites(selectedPeriod); // todo: services. for readability ?
       console.log('data: ', data) // todo: remove?
-      setTabsData(data)
-      console.log('re-rendered') // todo: remove?
+      setTabsData(data);
+      console.log('re-rendered');// todo: remove?
     }
-    fetchSites()
-    const intervalId = setInterval(fetchSites, 10000)
-    return () => clearInterval(intervalId)
+    fetchSites();
+    const intervalId: number = setInterval(fetchSites, 10000);
+    return () => clearInterval(intervalId);
   }, [selectedPeriod])
 
   // todo: unnec. fragments
@@ -29,7 +32,7 @@ function App() {
           <Buttons />
         </div>
         <hr></hr>
-        <TabList tabs={tabsToday} />
+        <TabList tabs ={tabsToday} /> {/*todo type never?*/}
       </div>
     </>
   )
