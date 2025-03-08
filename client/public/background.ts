@@ -1,6 +1,6 @@
 /// <reference types="chrome" />
 import services from '../src/services/services.ts'
-import { VisitToDB } from '../../types';
+import { Visit } from '../../types';
 
 let activeTabId: number | undefined = undefined;
 let activeTabUrl: string = ''; // Hostname of the active tab
@@ -14,7 +14,7 @@ function recordUsage() {
   lastTick = now;
   if (activeTabId && activeTabUrl) {
     tabUsage[activeTabUrl] = (tabUsage[activeTabUrl] || 0) + elapsed;
-    // console.log(`Tick: logged ${elapsed}ms for ${activeTabUrl}`);
+    // console.log(`Tick: logged ${elapsed}ms for ${activeTabUrl}`); // todo done: commented logs out
   }
 }
 
@@ -68,7 +68,7 @@ chrome.windows.onFocusChanged.addListener((windowId: number) => {
 });
 
 // Listen for url changes within the active tab
-chrome.tabs.onUpdated.addListener((tabId: number, changeInfo: chrome.tabs.TabChangeInfo) => { // todo: type TabChangeInfo
+chrome.tabs.onUpdated.addListener((tabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
   if (tabId === activeTabId && changeInfo.url) {
     // Record time for the previous url, then update to the new one
     recordUsage();
@@ -84,18 +84,19 @@ chrome.tabs.onRemoved.addListener((tabId: number) => {
   }
 });
 
-// todo: test and remove if unnec.
-//record usage every second
+// todo: why? (ask archie)
+//Record usage every second
 setInterval(recordUsage, 1000);
 
+// todo done: moved fetch call to services.ts
 // Send usage data every 30 seconds
 setInterval(() => {
   //Capture the latest time before sending
   recordUsage();
   if (Object.keys(tabUsage).length) {
-    const usageData: VisitToDB[] = Object.entries(tabUsage).map(([site, timespent]) => ({
+    const usageData: Visit[] = Object.entries(tabUsage).map(([site, timeSpent]) => ({
       site,
-      timespent,
+      timeSpent,
     }));
     // console.log("Sending tabUsage:", usageData);
     services.postSites(usageData).then(() => { tabUsage = {} }); // Clear usage if request succeeds

@@ -1,8 +1,8 @@
-import { VisitFromDB } from '../../../types';
+import { Visit } from '../../../types';
 // @ts-ignore
 import './TabItem.css'
 
-export default function TabItem({ site, totalTimeSpent }: VisitFromDB) {
+export default function TabItem({ site, timeSpent }: Visit) {
 
   const formatTime = (ms: number): string => {
     const hours = Math.floor(ms / 3600000);
@@ -13,7 +13,7 @@ export default function TabItem({ site, totalTimeSpent }: VisitFromDB) {
   return (
     <div id='item-container'>
       <h2>{site}</h2>
-      <h2>{formatTime(totalTimeSpent)}</h2>
+      <h2>{formatTime(timeSpent)}</h2>
     </div>
   )
 }

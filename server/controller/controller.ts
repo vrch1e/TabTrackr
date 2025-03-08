@@ -6,37 +6,36 @@ import { Visit } from '../../types.js';
 
 const getStats = async (req: Request, res: Response) => {
   const { period } = req.params;
-  // todo: const dayInMs = 24 * 60 * 60 * 1000;
+  const dayInMs = 24 * 60 * 60 * 1000; // todo done: day basis
   let timeFrame: Date;
 
+  // todo done: replaced new Date() with Date.now()
   if (period === 'today') {
-    timeFrame = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    timeFrame = new Date(Date.now() - dayInMs);
   } else if (period === 'week') {
-    timeFrame = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    timeFrame = new Date(Date.now() - 7 * dayInMs);
   } else if (period === 'month') {
-    timeFrame = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+    timeFrame = new Date(Date.now() - 30 * dayInMs);
   } else {
     return res.status(400).json({ error: "Invalid period" });
   }
 
-  // Sum up timespent for each site within the timeframe
-  const Visits = await TimeTracking.findAll({
+  // Sum up timeSpent for each site within the timeframe
+  const visits: Visit[] = await TimeTracking.findAll({
     where: {
       createdAt: { [Op.gte]: timeFrame }
     },
     attributes: [
       'site',
-      [sequelize.fn('SUM', sequelize.col('timespent')), 'totalTimeSpent']
+      [sequelize.fn('SUM', sequelize.col('timeSpent')), 'timeSpent']
     ],
-    group: ['site'],
-    order: [[sequelize.fn('SUM', sequelize.col('timespent')), 'DESC']],
+    group: ['site'], // todo: test and see if necessary? (ask archie)
+    order: [[sequelize.fn('SUM', sequelize.col('timeSpent')), 'DESC']],
     raw: true
   });
 
-
   res.status(200).json(visits);
 };
-
 
 const logVisit = async (req: Request, res: Response) => {
   const visits = req.body.usage;
@@ -47,10 +46,10 @@ const logVisit = async (req: Request, res: Response) => {
 
   // Create a new entry for each session
   await Promise.all(
-    visits.map(async ({ site, timespent }) => {
+    visits.map(async ({ site, timeSpent }: Visit) => {
       await TimeTracking.create({
         site,
-        timespent
+        timeSpent
       });
     })
   );
@@ -58,8 +57,8 @@ const logVisit = async (req: Request, res: Response) => {
   res.status(201).json({ msg: "Visits logged" });
 };
 
-
-const clearAll = async (req, res) => {
+// Delete all entries
+const clearAll = async (req: Request, res: Response) => {
   await TimeTracking.destroy({
     where: {}
   })

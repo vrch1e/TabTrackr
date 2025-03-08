@@ -1,14 +1,14 @@
-import { VisitFromDB, VisitToDB } from '../../../types.js';
+import { Visit } from '../../../types.js';
 
 const url: string = 'http://localhost:3000/';
 
-const getSites = async (period: string): Promise<VisitFromDB[]> => {
+const getSites = async (period: string): Promise<Visit[]> => {
   try {
     const response: Response = await fetch(url + `/${period}`);
     if (!response.ok) {
       throw new Error(`Response status: ${response.status}`);
     }
-    const json: VisitFromDB[] = await response.json();
+    const json: Visit[] = await response.json();
     // console.log(json);
     return json;
   }
@@ -18,7 +18,7 @@ const getSites = async (period: string): Promise<VisitFromDB[]> => {
   }
 }
 
-const postSites = async (usageData: VisitToDB[]) => {
+const postSites = async (usageData: Visit[]) => {
   fetch(url + "/visits", {
     method: "POST",
     headers: { "Content-Type": "application/json" },

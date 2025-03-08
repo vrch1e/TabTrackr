@@ -5,23 +5,10 @@ import './TabList.css';
 
 export default function TabList({ tabs }: TabListProps) {
 
-  // todo done: renamed timeSpent as totalTimeSpent and moved format function to tabItem component to be able to pass a type Visit to it
-  // todo done: removed unnec. parentheses around statements, argument and returned element (see old version on the bottom)
-  return (
-    <div id='container'>
-      {tabs.length > 0
-        ?
-          tabs.map( tab =>
-            <TabItem key={tab.id} site={tab.site} totalTimeSpent={tab.totalTimeSpent} />
-          )
-        :
-          <p>No tracked data available.</p>
-      }
-    </div>
-  );
-}
+  // todo done: moved format function to TabItem component to be able to pass a type Visit to it
+  // todo done: removed unnec. parentheses around statements, argument and returned element
 
-/* return (
+  /* return (
   <div id='container'>
     {tabs.length > 0 ? (
       tabs.map((tab) => (
@@ -33,3 +20,17 @@ export default function TabList({ tabs }: TabListProps) {
     )}
   </div>
 ); */
+
+  return (
+    <div id='container'>
+      {tabs.length > 0
+        ?
+          tabs.map( tab =>
+            <TabItem key={tab.id} site={tab.site} timeSpent={tab.timeSpent} />
+          )
+        :
+          <p>No tracked data available.</p>
+      }
+    </div>
+  );
+}
