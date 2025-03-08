@@ -1,67 +1,43 @@
 
 import { useState, useEffect } from 'react'
-import services from './services/services.js';
-import TabList from './components/TabList.js';
-import { Visit } from '../../types.js';
+import services from './services/services.ts';
+import TabList from './components/TabList.tsx';
+import Buttons from './components/Button.tsx';
+import { VisitFromDB } from '../../types.ts';
 // @ts-ignore
 import './App.css';
 
+// todo done: semi-colons & camelcase timeSpent
+// todo done: remove image files from public folders
+
 function App() {
 
-  const [tabsToday, setTabsData] = useState<Visit[]>([]);
+  const [tabsToday, setTabsData] = useState<VisitFromDB[]>([]);
   const [selectedPeriod, setSelectedPeriod] = useState<string>('today')
 
   useEffect(() => {
     const fetchSites = async () => {
-      const data: Visit[] = await services.getSites(selectedPeriod); // todo: services. for readability ?
-      console.log('data: ', data) // todo: remove?
+      const data: VisitFromDB[] = await services.getSites(selectedPeriod);
+      // console.log('data: ', data) // todo done: logs commented out
       setTabsData(data);
-      console.log('re-rendered');// todo: remove?
+      // console.log('re-rendered');
     }
     fetchSites();
     const intervalId: number = setInterval(fetchSites, 10000);
     return () => clearInterval(intervalId);
   }, [selectedPeriod])
 
-  // todo: unnec. fragments
+  // todo done: unnec. fragments
   return (
-    <>
-      <div id='container'>
-        <div id='dashboard'>
-          <h1>Time Tracked: {selectedPeriod}</h1>
-          <Buttons />
-        </div>
-        <hr></hr>
-        <TabList tabs ={tabsToday} /> {/*todo type never?*/}
+    <div id='container'>
+      <div id='dashboard'>
+        <h1>Time Tracked: {selectedPeriod}</h1>
+        <Buttons selectedPeriod={selectedPeriod} setSelectedPeriod={setSelectedPeriod}/>
       </div>
-    </>
+      <hr></hr>
+      <TabList tabs={tabsToday} />
+    </div>
   )
-
-  // todo: indentation + refactor? + separate file
-  function Buttons() {
-    if (selectedPeriod === 'today') {
-      return (
-        <>
-          <button onClick={() => { setSelectedPeriod('week') }}>Week</button>
-          <button onClick={() => { setSelectedPeriod('month') }}>Month</button>
-        </>
-      )
-    } else if (selectedPeriod === 'week') {
-      return (
-        <>
-          <button onClick={() => { setSelectedPeriod('today') }}>Today</button>
-          <button onClick={() => { setSelectedPeriod('month') }}>Month</button>
-        </>
-      )
-    } else {
-      return (
-        <>
-          <button onClick={() => { setSelectedPeriod('today') }}>Today</button>
-          <button onClick={() => { setSelectedPeriod('week') }}>Week</button>
-        </>
-      )
-    }
-  }
 }
 
 export default App

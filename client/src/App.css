@@ -22,14 +22,6 @@ h1 {
   color: black;
 }
 
-button {
-  width: 50px;
-  height: 30px;
-  margin-left: 10px;
-  border-radius: 3px;
-  background-color: #90e0ef;
-}
-
 hr {
   display: block;
   height: 3px;

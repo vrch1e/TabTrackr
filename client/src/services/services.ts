@@ -1,26 +1,36 @@
-import { Visit } from '../../../types.js';
-// todo: one folder for one file for one function? ok if adding more functionalities
+import { VisitFromDB, VisitToDB } from '../../../types.js';
 
-const getSites = async (period: String): Promise<Visit[]> => {
+const url: string = 'http://localhost:3000/';
 
-  const url: RequestInfo = `http://localhost:3000/stats/${period}` // todo: unnecessary? or in an .env?
-
+const getSites = async (period: string): Promise<VisitFromDB[]> => {
   try {
-
-    const response: Response = await fetch(url);
-
+    const response: Response = await fetch(url + `/${period}`);
     if (!response.ok) {
       throw new Error(`Response status: ${response.status}`);
     }
-
-    const json: Visit[] = await response.json();
-    console.log(json); // remove?
+    const json: VisitFromDB[] = await response.json();
+    // console.log(json);
     return json;
-
-  } catch (error: any) {
+  }
+  catch (error: any) {
     console.error(error.message);
     return [];
   }
 }
 
-export default { getSites }
+const postSites = async (usageData: VisitToDB[]) => {
+  fetch(url + "/visits", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ usage: usageData }),
+  })
+    .then((response) => {
+      if (!response.ok) throw new Error("Failed to send data");
+      return response.json();
+    })
+    .catch((error) => {
+      console.error("Error sending usage data:", error);
+    });
+}
+
+export default { getSites, postSites }
