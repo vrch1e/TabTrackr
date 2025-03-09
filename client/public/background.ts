@@ -15,15 +15,11 @@ function recordUsage() {
   const elapsed: number = now - lastTick;
   lastTick = now;
   if (activeTabId && activeTabUrl) {
-    //tabUsage[activeTabUrl] = (tabUsage[activeTabUrl] || 0) + elapsed;
+    // tabUsage[activeTabUrl] = (tabUsage[activeTabUrl] || 0) + elapsed;
     // todo done: refactored to fit new tabUsage type (pt.2)
-    // Check if we're already storing a Visit with that URL
     const visitIndex: number = tabUsage.findIndex( visit => visit.site === activeTabUrl);
-    // If so, then add elapsed to the total visit time
     if (visitIndex !== -1) {
-      tabUsage[visitIndex].timeSpent += elapsed;
-    }
-    // Otherwise, create a new Visit and store it
+      tabUsage[visitIndex].timeSpent += elapsed; }
     else {
       const newVisit: Visit = { site: activeTabUrl, timeSpent: elapsed };
       tabUsage.push(newVisit);
