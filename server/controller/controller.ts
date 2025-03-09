@@ -37,23 +37,15 @@ const getStats = async (req: Request, res: Response) => {
   res.status(200).json(visits);
 };
 
+// todo done: refactored due to new background.js' implementation (pt.4)
 const logVisit = async (req: Request, res: Response) => {
-  const visits = req.body.usage;
-
-  if (!Array.isArray(visits)) {
-    return res.status(400).json({ error: "Expected an array of visits" });
-  }
-
+  const visits: Visit[] = req.body.usage;
   // Create a new entry for each session
   await Promise.all(
-    visits.map(async ({ site, timeSpent }: Visit) => {
-      await TimeTracking.create({
-        site,
-        timeSpent
-      });
+    visits.map( async (visit) => {
+      await TimeTracking.create(visit);
     })
   );
-
   res.status(201).json({ msg: "Visits logged" });
 };
 
@@ -62,7 +54,7 @@ const clearAll = async (req: Request, res: Response) => {
   await TimeTracking.destroy({
     where: {}
   })
-  res.json({ msg: "all data deleted" })
+  res.json({ msg: "All data deleted" })
 }
 
 export default { getStats, logVisit, clearAll }

@@ -5,7 +5,9 @@ import { Visit } from '../../types';
 let activeTabId: number | undefined = undefined;
 let activeTabUrl: string = ''; // Hostname of the active tab
 let lastTick: number = Date.now();
-let tabUsage: object = {}; // Accumulates usage per site
+// let tabUsage = {}; // Accumulates usage per site
+// todo done: refactored to satisfy TypeScript's need for key names (pt.1)
+let tabUsage: Visit[]; 
 
 // Record elapsed time for the current active tab
 function recordUsage() {
@@ -13,7 +15,19 @@ function recordUsage() {
   const elapsed: number = now - lastTick;
   lastTick = now;
   if (activeTabId && activeTabUrl) {
-    tabUsage[activeTabUrl] = (tabUsage[activeTabUrl] || 0) + elapsed;
+    //tabUsage[activeTabUrl] = (tabUsage[activeTabUrl] || 0) + elapsed;
+    // todo done: refactored to fit new tabUsage type (pt.2)
+    // Check if we're already storing a Visit with that URL
+    const visitIndex: number = tabUsage.findIndex( visit => visit.site === activeTabUrl);
+    // If so, then add elapsed to the total visit time
+    if (visitIndex !== -1) {
+      tabUsage[visitIndex].timeSpent += elapsed;
+    }
+    // Otherwise, create a new Visit and store it
+    else {
+      const newVisit: Visit = { site: activeTabUrl, timeSpent: elapsed };
+      tabUsage.push(newVisit);
+    }
     // console.log(`Tick: logged ${elapsed}ms for ${activeTabUrl}`); // todo done: commented logs out
   }
 }
@@ -93,13 +107,10 @@ setInterval(recordUsage, 1000);
 setInterval(() => {
   //Capture the latest time before sending
   recordUsage();
-  if (Object.keys(tabUsage).length) {
-    const usageData: Visit[] = Object.entries(tabUsage).map(([site, timeSpent]) => ({
-      site,
-      timeSpent,
-    }));
+  // todo done: refactored following changes in recordUsage() (pt.3)
+  if (tabUsage.length) {
     // console.log("Sending tabUsage:", usageData);
-    services.postSites(usageData).then(() => { tabUsage = {} }); // Clear usage if request succeeds
+    services.postSites(tabUsage).then(() => { tabUsage = [] }); // Clear usage if request succeeds
   }
 }, 30000);
 
