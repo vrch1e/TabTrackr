@@ -38,7 +38,7 @@ const getStats = async (req: Request, res: Response) => {
 };
 
 // todo done: refactored due to new background.js' implementation (pt.4)
-const logVisit = async (req: Request, res: Response) => {
+const logVisits = async (req: Request, res: Response) => {
   const visits: Visit[] = req.body.usage;
   // Create a new entry for each session
   await Promise.all(
@@ -57,4 +57,4 @@ const clearAll = async (req: Request, res: Response) => {
   res.json({ msg: "All data deleted" })
 }
 
-export default { getStats, logVisit, clearAll }
+export default { getStats, logVisits, clearAll }
