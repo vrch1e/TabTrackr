@@ -2,7 +2,7 @@ import VisitModel from "../model/model.js";
 import sequelize from "../config/database.js";
 import { Op } from 'sequelize';
 import { Request, Response } from 'express';
-import { Visit } from '../../types.js';
+import { Visit } from '../../../types.js';
 
 const getStats = async (req: Request, res: Response) => {
   const { period } = req.params;
@@ -42,9 +42,7 @@ const logVisits = async (req: Request, res: Response) => {
   const visits: Visit[] = req.body.usage;
   // Create a new entry for each session
   await Promise.all(
-    visits.map( async visit => {
-      await VisitModel.create(visit);
-    })
+    visits.map(async visit => await VisitModel.create(visit))
   );
   res.status(201).json({ msg: "Visits logged" });
 };

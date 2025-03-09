@@ -1,7 +1,7 @@
 import { Model, DataTypes, InferAttributes, InferCreationAttributes, CreationOptional } from 'sequelize';
 import sequelize from '../config/database.js';
 
-class Visit extends Model<InferAttributes<Visit>, InferCreationAttributes<Visit>> {
+class VisitModel extends Model<InferAttributes<VisitModel>, InferCreationAttributes<VisitModel>> {
   public id!: CreationOptional<number>;
   public site!: string;
   public timeSpent!: number;
@@ -9,7 +9,7 @@ class Visit extends Model<InferAttributes<Visit>, InferCreationAttributes<Visit>
   public readonly updatedAt?: Date;
 }
 
-Visit.init(
+VisitModel.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -27,12 +27,13 @@ Visit.init(
   },
   {
     sequelize,
-    timestamps: true
+    timestamps: true,
+    tableName: 'Visits'
   }
 );
 
-Visit.sync({ alter: true })
+VisitModel.sync({ alter: true })
   .then(() => console.log('Visit model synchronized with the database'))
   .catch((err) => console.log('Error syncing Visit model:', err));
 
-export default Visit;
+export default VisitModel;
