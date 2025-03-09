@@ -1,4 +1,4 @@
-import TimeTracking from "../model/model.js";
+import VisitModel from "../model/model.js";
 import sequelize from "../config/database.js";
 import { Op } from 'sequelize';
 import { Request, Response } from 'express';
@@ -21,7 +21,7 @@ const getStats = async (req: Request, res: Response) => {
   }
 
   // Sum up timeSpent for each site within the timeframe
-  const visits: Visit[] = await TimeTracking.findAll({
+  const visits: Visit[] = await VisitModel.findAll({
     where: {
       createdAt: { [Op.gte]: timeFrame }
     },
@@ -42,8 +42,8 @@ const logVisits = async (req: Request, res: Response) => {
   const visits: Visit[] = req.body.usage;
   // Create a new entry for each session
   await Promise.all(
-    visits.map( async (visit) => {
-      await TimeTracking.create(visit);
+    visits.map( async visit => {
+      await VisitModel.create(visit);
     })
   );
   res.status(201).json({ msg: "Visits logged" });
@@ -51,7 +51,7 @@ const logVisits = async (req: Request, res: Response) => {
 
 // Delete all entries
 const clearAll = async (req: Request, res: Response) => {
-  await TimeTracking.destroy({
+  await VisitModel.destroy({
     where: {}
   })
   res.json({ msg: "All data deleted" })
