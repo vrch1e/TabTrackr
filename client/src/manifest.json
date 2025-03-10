@@ -5,7 +5,9 @@
     "manifest_version": 3,
     "action": {
         "default_popup": "index.html",
-        "default_icon": "tabtrackrzoomed.png"
+        "default_icon": {
+            "128": "tabtrackrzoomed.png"
+        }
     },
     "icons": {
         "16": "tabtrackrzoomed.png",
@@ -22,6 +24,6 @@
         "<all_urls>"
     ],
     "background": {
-        "service_worker": "background.ts"
+        "service_worker": "src/background.ts"
     }
 }
