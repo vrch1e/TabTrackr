@@ -9,7 +9,7 @@ export interface Visit {
 
 export interface ButtonProps {
   selectedPeriod: string,
-  setSelectedPeriod: function (string): void
+  setSelectedPeriod: (string) => void
 }
   
 export interface TabListProps {
