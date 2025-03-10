@@ -6,7 +6,7 @@ let activeTabId: number | undefined = undefined;
 let activeTabUrl: string = ''; // Hostname of the active tab
 let lastTick: number = Date.now();
 // let tabUsage = {}; // Accumulates usage per site
-// todo done: refactored to satisfy TypeScript's need for key names (pt.1)
+// todo done: refactored to satisfy TypeScript's need for key names (pt.1) > + consistent format all around now!
 let tabUsage: Visit[] = []; 
 
 // Record elapsed time for the current active tab
@@ -103,7 +103,7 @@ setInterval(recordUsage, 1000);
 setInterval(() => {
   //Capture the latest time before sending
   recordUsage();
-  // todo done: refactored following changes in recordUsage() (pt.3) / more efficient now!
+  // todo done: refactored following changes in recordUsage() (pt.3) > + more efficient now!
   if (tabUsage.length) {
     // console.log("Sending tabUsage:", usageData);
     services.postSites(tabUsage).then(() => { tabUsage = [] }); // Clear usage if request succeeds
