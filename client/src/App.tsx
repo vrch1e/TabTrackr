@@ -22,7 +22,7 @@ function App() {
       // console.log('re-rendered');
     }
     fetchSites();
-    const intervalId: number = setInterval(fetchSites, 10000);
+    const intervalId: NodeJS.Timeout = setInterval(fetchSites, 10000);
     return () => clearInterval(intervalId);
   }, [selectedPeriod])
 
