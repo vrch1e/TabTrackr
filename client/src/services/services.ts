@@ -1,10 +1,10 @@
 import { Visit } from '../../../types.js';
 
-const url: string = 'http://localhost:3000/';
+const url: string = 'http://localhost:3000';
 
 const getSites = async (period: string): Promise<Visit[]> => {
   try {
-    const response: Response = await fetch(url + `/${period}`);
+    const response: Response = await fetch(`${url}/stats/${period}`);
     if (!response.ok) {
       throw new Error(`Response status: ${response.status}`);
     }
@@ -19,7 +19,7 @@ const getSites = async (period: string): Promise<Visit[]> => {
 }
 
 const postSites = async (usageData: Visit[]) => {
-  fetch(url + "/visits", {
+  fetch(`${url}/visits`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ usage: usageData }),

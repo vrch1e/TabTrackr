@@ -28,7 +28,7 @@ VisitModel.init(
   {
     sequelize,
     timestamps: true,
-    tableName: 'Visits'
+    tableName: 'visits'
   }
 );
 
