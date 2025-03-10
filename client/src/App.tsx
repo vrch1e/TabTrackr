@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import services from './services/services.ts';
-import TabList from './components/TabList.tsx';
-import Buttons from './components/Button.tsx';
-import { Visit } from '../../types.ts';
+import services from './services/services';
+import TabList from './components/TabList';
+import Buttons from './components/Button';
+import { Visit } from '../../types';
 // @ts-ignore
 import './App.css';
 

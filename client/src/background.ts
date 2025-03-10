@@ -1,5 +1,5 @@
 /// <reference types="chrome" />
-import services from '../src/services/services.ts'
+import services from '../src/services/services'
 import { Visit } from '../../types';
 
 let activeTabId: number | undefined = undefined;
