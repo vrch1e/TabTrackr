@@ -3,9 +3,12 @@
   "version": "1.0.0",
   "main": "server.js",
   "type": "module",
+  "jest": {
+    "transform": {}
+},
   "scripts": {
     "dev": "dotenv -v ENV=dev -- tsc && nodemon ./dist/server.js",
-    "test": "dotenv -v ENV=test -- npm test"
+    "test":"node --experimental-vm-modules node_modules/jest/bin/jest.js && dotenv -v ENV=test -- tsc && jest ./dist/controller/controller.test.js"
   },
   "keywords": [],
   "author": "",
