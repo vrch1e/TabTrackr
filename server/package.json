@@ -4,7 +4,8 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "dotenv -v ENV=dev -- tsc && nodemon ./dist/server.js",
+    "test": "dotenv -v ENV=test -- npm test"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +25,7 @@
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
-    "@types/node": "^22.13.9"
+    "@types/node": "^22.13.9",
+    "dotenv-cli": "^8.0.0"
   }
 }

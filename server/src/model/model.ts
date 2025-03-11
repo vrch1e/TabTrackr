@@ -33,7 +33,7 @@ VisitModel.init(
 );
 
 VisitModel.sync({ alter: true })
-  .then(() => console.log('Visit model synchronized with the database'))
+  .then(() => console.log('Synchronized with database'))
   .catch((err) => console.log('Error syncing Visit model:', err));
 
 export default VisitModel;

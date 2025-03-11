@@ -12,6 +12,6 @@ describe('Unit tests', () => {
   const request = supertest(app);
 
   beforeAll(async () => {
-    await sequelize.authenticate();
+    // await sequelize.authenticate();
   })
 });
