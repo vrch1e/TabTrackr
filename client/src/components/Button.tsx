@@ -6,7 +6,7 @@ function Buttons ({selectedPeriod, setSelectedPeriod}: ButtonProps) {
 
   // todo done: indentation
 
-  if (selectedPeriod === 'today') {
+  if (selectedPeriod === 'last24h') {
     return (
       <>
         <button onClick={() => { setSelectedPeriod('week') }}>Week</button>
@@ -16,14 +16,14 @@ function Buttons ({selectedPeriod, setSelectedPeriod}: ButtonProps) {
   } else if (selectedPeriod === 'week') {
     return (
       <>
-        <button onClick={() => { setSelectedPeriod('today') }}>Today</button>
+        <button onClick={() => { setSelectedPeriod('last24h') }}>Last 24h</button>
         <button onClick={() => { setSelectedPeriod('month') }}>Month</button>
       </>
     )
   } else {
     return (
       <>
-        <button onClick={() => { setSelectedPeriod('today') }}>Today</button>
+        <button onClick={() => { setSelectedPeriod('last24h') }}>Last 24h</button>
         <button onClick={() => { setSelectedPeriod('week') }}>Week</button>
       </>
     )

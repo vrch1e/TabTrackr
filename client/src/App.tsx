@@ -11,8 +11,8 @@ import './App.css';
 
 function App() {
 
-  const [tabsToday, setTabsData] = useState<Visit[]>([]);
-  const [selectedPeriod, setSelectedPeriod] = useState<string>('today')
+  const [tabsLast24h, setTabsData] = useState<Visit[]>([]);
+  const [selectedPeriod, setSelectedPeriod] = useState<string>('last24h')
 
   useEffect(() => {
     const fetchSites = async () => {
@@ -34,7 +34,7 @@ function App() {
         <Buttons selectedPeriod={selectedPeriod} setSelectedPeriod={setSelectedPeriod}/>
       </div>
       <hr></hr>
-      <TabList tabs={tabsToday} />
+      <TabList tabs={tabsLast24h} />
     </div>
   )
 }

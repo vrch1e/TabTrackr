@@ -6,11 +6,11 @@ import { Visit } from '../../../types.js';
 
 const getStats = async (req: Request, res: Response) => {
   const { period } = req.params;
-  const dayInMs = 24 * 60 * 60 * 1000; // todo done: day basis
+  const dayInMs = 24 * 60 * 60 * 1000; // todo done: day basis / DRY multiplication!
   let timeFrame: Date;
 
   // todo done: replaced new Date() with Date.now()
-  if (period === 'today') {
+  if (period === 'last24h') {
     timeFrame = new Date(Date.now() - dayInMs);
   } else if (period === 'week') {
     timeFrame = new Date(Date.now() - 7 * dayInMs);
