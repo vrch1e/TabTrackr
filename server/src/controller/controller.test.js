@@ -4,13 +4,6 @@ import sequelize from 'sequelize';
 import supertest from 'supertest';
 import { describe } from 'node:test';
 
-const { Sequelize } = require('sequelize');
-const sequelize = new Sequelize('test_db', 'username', 'password', {
-  host: 'localhost',
-  dialect: 'postgres',
-  logging, false
-})
-
 describe('Unit tests', () => {
 
   const app = express();
@@ -18,8 +11,7 @@ describe('Unit tests', () => {
   app.use(router);
   const request = supertest(app);
 
-  beforeAll( async () => {
+  beforeAll(async () => {
     await sequelize.authenticate();
-    
   })
-})
+});
