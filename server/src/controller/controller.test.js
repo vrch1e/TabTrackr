@@ -1,10 +1,15 @@
 import express from 'express';
 import router from './router.js';
-import VisitModel from '../model/model.js'
+import sequelize from 'sequelize';
 import supertest from 'supertest';
 import { describe } from 'node:test';
-import sequelize from 'sequelize';
-const dbName = test_db;
+
+const { Sequelize } = require('sequelize');
+const sequelize = new Sequelize('test_db', 'username', 'password', {
+  host: 'localhost',
+  dialect: 'postgres',
+  logging, false
+})
 
 describe('Unit tests', () => {
 
@@ -14,6 +19,7 @@ describe('Unit tests', () => {
   const request = supertest(app);
 
   beforeAll( async () => {
+    await sequelize.authenticate();
     
   })
 })
