@@ -41,10 +41,15 @@ const getStats = async (req: Request, res: Response) => {
 const logVisits = async (req: Request, res: Response) => {
   const visits: Visit[] = req.body.usage;
   // Create a new entry for each session
-  await Promise.all(
-    visits.map(async visit => await VisitModel.create(visit))
-  );
-  res.status(201).json({ msg: "Visits logged" });
+  try {
+    await Promise.all(
+      visits.map(async visit => await VisitModel.create(visit))
+    );
+    res.status(201).json({ msg: "Visits logged" });
+  }
+  catch (err) {
+    console.log('Error retrieving tab info:', err);
+  }
 };
 
 // Delete all entries

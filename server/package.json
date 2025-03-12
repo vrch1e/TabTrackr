@@ -3,12 +3,9 @@
   "version": "1.0.0",
   "main": "server.js",
   "type": "module",
-  "jest": {
-    "transform": {}
-},
   "scripts": {
     "dev": "dotenv -v ENV=dev -- tsc && nodemon ./dist/server.js",
-    "test":"node --experimental-vm-modules node_modules/jest/bin/jest.js && dotenv -v ENV=test -- tsc && jest ./dist/controller/controller.test.js"
+    "test": "dotenv -v ENV=test -- tsc && vitest --dir ./dist/controller"
   },
   "keywords": [],
   "author": "",
@@ -18,7 +15,6 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
-    "jest": "^29.7.0",
     "nodemon": "^3.1.9",
     "pg": "^8.13.3",
     "pg-hstore": "^2.3.4",
@@ -29,6 +25,7 @@
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "@types/node": "^22.13.9",
-    "dotenv-cli": "^8.0.0"
+    "dotenv-cli": "^8.0.0",
+    "vitest": "^3.0.8"
   }
 }
