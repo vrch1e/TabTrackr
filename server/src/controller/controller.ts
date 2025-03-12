@@ -4,6 +4,22 @@ import { Op } from 'sequelize';
 import { Request, Response } from 'express';
 import { Visit } from '../../../types.js';
 
+// todo done: refactored due to new background.js' implementation (pt.4)
+const logVisits = async (req: Request, res: Response) => {
+  const visits: Visit[] = req.body.usage;
+  console.log(visits);
+  // Create a new entry for each session
+  try {
+    await Promise.all(
+      visits.map(async visit => await VisitModel.create(visit))
+    );
+    res.status(201).json({ msg: "Visits logged" });
+  }
+  catch (err) {
+    console.log('Error retrieving tab info:', err);
+  }
+};
+
 const getStats = async (req: Request, res: Response) => {
   const { period } = req.params;
   const dayInMs = 24 * 60 * 60 * 1000; // todo done: DRYed multiplication on l.10, 13 & 16
@@ -37,27 +53,12 @@ const getStats = async (req: Request, res: Response) => {
   res.status(200).json(visits);
 };
 
-// todo done: refactored due to new background.js' implementation (pt.4)
-const logVisits = async (req: Request, res: Response) => {
-  const visits: Visit[] = req.body.usage;
-  // Create a new entry for each session
-  try {
-    await Promise.all(
-      visits.map(async visit => await VisitModel.create(visit))
-    );
-    res.status(201).json({ msg: "Visits logged" });
-  }
-  catch (err) {
-    console.log('Error retrieving tab info:', err);
-  }
-};
-
 // Delete all entries
 const clearAll = async (req: Request, res: Response) => {
   await VisitModel.destroy({
     where: {}
   })
-  res.json({ msg: "All data deleted" })
+  res.json({ msg: "All data deleted." })
 }
 
 export default { getStats, logVisits, clearAll }

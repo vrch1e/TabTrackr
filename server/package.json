@@ -4,8 +4,8 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "dev": "dotenv -v ENV=dev -- tsc && nodemon ./dist/server.js",
-    "test": "dotenv -v ENV=test -- tsc && vitest --dir ./dist/controller"
+    "dev": "tsc && VITE_ENV=dev nodemon ./dist/server.js",
+    "test": "tsc && VITE_ENV=test vitest --dir ./dist/controller"
   },
   "keywords": [],
   "author": "",
