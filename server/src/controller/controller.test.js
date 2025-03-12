@@ -32,7 +32,7 @@ describe('Unit tests', () => {
     catch (err) {
       console.log('Error sending tab info to DB:', err);
     }
-  }, 10000);
+  });
 
   it('should receive a Visit[] from the database', async (done) => {
     const testVisitA = { site: 'a-test.com', timeSpent: '10000' };
