@@ -98,7 +98,7 @@ chrome.tabs.onRemoved.addListener((tabId: number) => {
 //Record usage every second
 setInterval(recordUsage, 1000);
 
-// todo done: moved fetch call to services.ts
+// todo done: moved fetch call into postSites function in services.ts
 // Send usage data every 30 seconds
 setInterval(() => {
   //Capture the latest time before sending

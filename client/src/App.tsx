@@ -6,7 +6,7 @@ import { Visit } from '../../types';
 // @ts-ignore
 import './App.css';
 
-// todo done: semi-colons
+// todo done: semi-colons?
 // todo done: remove image files from public folders
 
 function App() {
@@ -26,7 +26,7 @@ function App() {
     return () => clearInterval(intervalId);
   }, [selectedPeriod])
 
-  // todo done: unnec. fragments
+  // todo done: removed unnecessary fragments
   return (
     <div id='container'>
       <div id='dashboard'>
@@ -38,5 +38,7 @@ function App() {
     </div>
   )
 }
+
+// todo done: moved Buttons component function into own file
 
 export default App

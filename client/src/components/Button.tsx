@@ -4,7 +4,7 @@ import './Button.css';
 
 function Buttons ({selectedPeriod, setSelectedPeriod}: ButtonProps) {
 
-  // todo done: indentation
+  // todo done: fixed indentation
 
   if (selectedPeriod === 'last24h') {
     return (

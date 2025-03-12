@@ -6,7 +6,7 @@ import { Visit } from '../../../types.js';
 
 const getStats = async (req: Request, res: Response) => {
   const { period } = req.params;
-  const dayInMs = 24 * 60 * 60 * 1000; // todo done: day basis / DRY multiplication!
+  const dayInMs = 24 * 60 * 60 * 1000; // todo done: DRYed multiplication on l.10, 13 & 16
   let timeFrame: Date;
 
   // todo done: replaced new Date() with Date.now()
@@ -29,7 +29,7 @@ const getStats = async (req: Request, res: Response) => {
       'site',
       [sequelize.fn('SUM', sequelize.col('timeSpent')), 'timeSpent']
     ],
-    group: ['site'], // todo: test and see if necessary? (ask archie)
+    group: ['site'], // todo: what does this do?
     order: [[sequelize.fn('SUM', sequelize.col('timeSpent')), 'DESC']],
     raw: true
   });
