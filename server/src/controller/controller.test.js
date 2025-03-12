@@ -24,9 +24,9 @@ describe('Unit tests', () => {
   it('should send a Visit to the database', async (done) => {
     const testVisit = { site: 'test.com', timeSpent: '10000' };
     try {
-      const res = await request.post('/visits').send(testVisit);
-      const visit = await VisitModel.findAll({where: {site: 'test.com'}});
-      expect(visit).toBe({ site: 'test.com', timeSpent: '10000' });
+      const res = await request.post('/visits').send({usage: [testVisit]});
+      const visits = await VisitModel.findAll({where: {site: 'test.com'}});
+      expect(visits).toBe([{ site: 'test.com', timeSpent: '10000' }]);
       done();
     }
     catch (err) {
