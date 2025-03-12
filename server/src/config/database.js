@@ -2,7 +2,7 @@ import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv'
 dotenv.config()
 
-const DB_NAME = process.env.ENV === 'test'
+const DB_NAME = process.env.VITE_ENV === 'test'
   ? process.env.DB_TEST
   : process.env.DB_REAL;
 

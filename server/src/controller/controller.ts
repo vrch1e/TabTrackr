@@ -7,7 +7,6 @@ import { Visit } from '../../../types.js';
 // todo done: refactored due to new background.js' implementation (pt.4)
 const logVisits = async (req: Request, res: Response) => {
   const visits: Visit[] = req.body.usage;
-  console.log(visits);
   // Create a new entry for each session
   try {
     await Promise.all(

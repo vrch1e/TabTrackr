@@ -2,11 +2,11 @@ import { Model, DataTypes, InferAttributes, InferCreationAttributes, CreationOpt
 import sequelize from '../config/database.js';
 
 class VisitModel extends Model<InferAttributes<VisitModel>, InferCreationAttributes<VisitModel>> {
-  public id!: CreationOptional<number>;
-  public site!: string;
-  public timeSpent!: number;
-  public readonly createdAt?: Date;
-  public readonly updatedAt?: Date;
+  declare id: CreationOptional<number>;
+  declare site: string;
+  declare timeSpent: number;
+  declare readonly createdAt?: Date;
+  declare readonly updatedAt?: Date;
 }
 
 VisitModel.init(
