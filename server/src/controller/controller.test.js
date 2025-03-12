@@ -24,30 +24,30 @@ describe('Unit tests', () => {
   it('should send a Visit to the database', () => new Promise( done => {
     const testVisit = { site: 'test.com', timeSpent: 10000 };
     request.post('/visits').send({ usage: [testVisit] })
-    .then( () => VisitModel.findOne({where: {site: 'test.com'}}))
-    .then( instance => {
-      expect(instance.site).toBe('test.com');
-      expect(instance.timeSpent).toBe(10000);
+    .then( () => VisitModel.findOne({where: {site: 'test.com'}, raw: true}))
+    .then( visit => {
+      expect(visit.site).toBe('test.com');
+      expect(visit.timeSpent).toBe(10000);
       done();
     })
     .catch(err => console.log('Error sending tab info to DB:', err));
   }));
 
-  it('should receive a Visit[] from the database', async (done) => {
-    try {
-      const resEmpty = await request.get('/stats/last24h');
-      expect(JSON.parse(resEmpty)).toBe([]);
-      const testVisitA = { site: 'a-test.com', timeSpent: '10000' };
-      const testVisitB = { site: 'b-test.com', timeSpent: '20000' };
-      await request.post('/visits').send(testVisitA);
-      await request.post('/visits').send(testVisitB);
-      const resFull = await request.get('/stats/last24h');
-      expect(JSON.parse(resFull)).toBe([testVisitA, testVisitB]);
+  it('should receive a Visit[] from the database', () => new Promise( done => {
+    request.get('/stats/last24h')
+    .then( result => expect(JSON.parse(result)).toBe([]))
+    .catch(err => console.log('Error sending tab info to DB:', err));
+    const testVisitA = { site: 'a-test.com', timeSpent: '10000' };
+    const testVisitB = { site: 'b-test.com', timeSpent: '20000' };
+    request.post('/visits').send(testVisitA)
+    .then( () => request.post('/visits').send(testVisitB))
+    .then( () => request.get('/stats/last24h'))
+    .then( visit => {
+      expect(visit.site).toBe('test.com');
+      expect(visit.timeSpent).toBe(10000);
       done();
-    }
-    catch (err) {
-      console.log('Error retrieving tab info from DB:', err);
-    }
-  });
+    })
+    .catch(err => console.log('Error sending tab info to DB:', err));
+  }));
 
 });
