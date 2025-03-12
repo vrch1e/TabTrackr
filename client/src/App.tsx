@@ -30,7 +30,7 @@ function App() {
   return (
     <div id='container'>
       <div id='dashboard'>
-        <h1>Time Tracked: {selectedPeriod}</h1>
+        <h1>Time Tracked: {selectedPeriod === 'last24h' ? 'Last 24H' : selectedPeriod === 'week' ? 'Week' : 'Month'}</h1>
         <Buttons selectedPeriod={selectedPeriod} setSelectedPeriod={setSelectedPeriod}/>
       </div>
       <hr></hr>

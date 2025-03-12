@@ -24,7 +24,6 @@ const getSites = async (period: string): Promise<Visit[]> => {
       throw new Error(`Response status: ${response.status}`);
     }
     const json: Visit[] = await response.json();
-    // console.log(json);
     return json;
   }
   catch (error: any) {

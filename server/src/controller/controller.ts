@@ -6,17 +6,26 @@ import { Visit } from '../../../types.js';
 
 // todo done: refactored due to new background.js' implementation (pt.4)
 const logVisits = async (req: Request, res: Response) => {
+
+  if (isBodyIncomplete(req.body)) return res.status(400).json('One or more fields missing.');
+
   const visits: Visit[] = req.body.usage;
   // Create a new entry for each session
   try {
     await Promise.all(
       visits.map(async visit => await VisitModel.create(visit))
     );
-    res.status(201).json({ msg: "Visits logged" });
+    res.status(201).json({ msg: "Visits logged." });
   }
   catch (err) {
     console.log('Error retrieving tab info:', err);
   }
+
+  function isBodyIncomplete(body: any): boolean {
+    return !body || Object.keys(body).length == 0 || !Object.hasOwn(body, 'usage') || !Array.isArray(body.usage)
+      || body.usage.length == 0 || body.usage.some((visit: any) => !visit.site || !visit.timeSpent);
+  }
+
 };
 
 const getStats = async (req: Request, res: Response) => {
@@ -32,11 +41,11 @@ const getStats = async (req: Request, res: Response) => {
   } else if (period === 'month') {
     timeFrame = new Date(Date.now() - 30 * dayInMs);
   } else {
-    return res.status(400).json({ error: "Invalid period" });
+    return res.status(400).json({ error: "Invalid period." });
   }
 
   // Sum up timeSpent for each site within the timeframe
-  const visits: Visit[] = await VisitModel.findAll({
+  const stringVisits: any = await VisitModel.findAll({
     where: {
       createdAt: { [Op.gte]: timeFrame }
     },
@@ -48,7 +57,9 @@ const getStats = async (req: Request, res: Response) => {
     order: [[sequelize.fn('SUM', sequelize.col('timeSpent')), 'DESC']],
     raw: true
   });
-
+  const visits: Visit[] = stringVisits.map( function (visit: any) {
+    return { site: visit.site, timeSpent: parseInt(visit.timeSpent) };
+  })
   res.status(200).json(visits);
 };
 
