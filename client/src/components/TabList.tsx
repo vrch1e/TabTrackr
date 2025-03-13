@@ -8,19 +8,6 @@ export default function TabList({ tabs }: TabListProps) {
   // todo done: moved format function to TabItem component to be able to pass a type Visit to it
   // todo done: removed unnec. parentheses around statements, argument and returned element
 
-  /* return (
-  <div id='container'>
-    {tabs.length > 0 ? (
-      tabs.map((tab) => (
-        <TabItem key={tab.id} id={tab.id} site={tab.site} totalTimeSpent={tab.totalTimeSpent} />
-
-      ))
-    ) : (
-      <p>No tracked data available.</p>
-    )}
-  </div>
-); */
-
   return (
     <div id='container'>
       {tabs.length > 0

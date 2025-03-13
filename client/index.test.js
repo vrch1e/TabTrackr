@@ -1,6 +1,8 @@
 import puppeteer from 'puppeteer';
+// import sequelize from '../pj-2-legacy-tabtrackr-ts/server/src/config/database.js';
+// import VisitModel from '../pj-2-legacy-tabtrackr-ts/server/src/model/model.js';
 
-const EXTENSION_PATH = './dist';
+const EXTENSION_PATH = '../pj-2-legacy-tabtrackr-ts/client/dist';
 const EXTENSION_ID = 'jlkcfdokhgakbcpokmbclbdncaglbbec';
 
 let browser;
@@ -37,3 +39,10 @@ test('clicking period button updates title', async () => {
   const h1Text = await page.$eval('h1', h1 => h1.innerText);
   expect(h1Text).toBe(`Time Tracked: ${randomButtonText}`);
 });
+
+/* test('displays list of visits', async () => {
+  await sequelize.authenticate();
+  const visitList = await VisitModel.findOne({where: {}, raw: true});
+  const itemContainers = await page.$$eval('.item-containers');
+  console.log(itemContainers);
+}); */
