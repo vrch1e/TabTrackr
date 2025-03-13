@@ -57,8 +57,8 @@ const getStats = async (req: Request, res: Response) => {
     order: [[sequelize.fn('SUM', sequelize.col('timeSpent')), 'DESC']],
     raw: true
   });
-  // Sequelize SUM function stringifies numbers, e.g. timeSpent here,
-  // so we need to parseInt() timeSpent to get a proper Vist[] again
+  // todo done: sequelize SUM function stringifies numbers, e.g. timeSpent here...
+  // todo done: so we need to parseInt() timeSpent to get a proper Vist[] again
   const visits: Visit[] = stringVisits.map( function (visit: any) {
     return { site: visit.site, timeSpent: parseInt(visit.timeSpent) };
   })

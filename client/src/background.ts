@@ -98,17 +98,45 @@ chrome.tabs.onRemoved.addListener((tabId: number) => {
 //Record usage every second
 setInterval(recordUsage, 1000);
 
-// todo done: moved fetch call into postSites function in services.ts
+/* setInterval(() => {
+  recordUsage();
+  if (Object.keys(tabUsage).length > 0) {
+    const usageData = Object.entries(tabUsage).map(([site, timespent]) => ({
+      site,
+      timespent,
+    }));
+    console.log("Sending tabUsage:", usageData);
+    fetch("http://localhost:3000/visits", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ usage: usageData }),
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error("Failed to send data");
+        return response.json();
+      })
+      .then(() => {
+        tabUsage = {};
+      })
+      .catch((error) => {
+        console.error("Error sending usage data:", error);
+      });
+  }
+}, 30000);
+ */
+
+// todo done: moved fetch call into postSites function in services.ts...
+// todo done: ...and refactored according to new tabUsage data format (pt.3) > + more efficient now!
 // Send usage data every 30 seconds
 setInterval(() => {
   //Capture the latest time before sending
   recordUsage();
-  // todo done: refactored following changes in recordUsage() (pt.3) > + more efficient now!
   if (tabUsage.length) {
     // console.log("Sending tabUsage:", usageData);
     services.postSites(tabUsage).then(() => { tabUsage = [] }); // Clear usage if request succeeds
   }
 }, 30000);
+
 
 // console.log("background tab tracking script is running");
 

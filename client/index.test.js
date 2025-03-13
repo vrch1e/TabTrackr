@@ -46,3 +46,10 @@ test('clicking period button updates title', async () => {
   const itemContainers = await page.$$eval('.item-containers');
   console.log(itemContainers);
 }); */
+
+
+// KARSTEN'S COMMENTS ABOUT THE RED UNDERLINES
+
+/* Okay so actually there is no need to use the ES6 module syntax (the import ... from ...) as you're not really importing anything anyway, so your tests are standalone. Thus going back to require I could just run the test file with npx jest.
+Now why you had the require not defined is probably due to some VSCode feature that knows your package.json has type: module in it so it expects all .js files to follow the ES6 module syntax.
+Also, since you'd like to test with a headless browser, there's some more setup required - maybe this package can help: https://www.npmjs.com/package/jest-puppeteer */
