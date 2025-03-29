@@ -3,7 +3,7 @@ import services from '../src/services/services'
 import { Visit } from '../../types';
 
 let activeTabId: number | undefined = undefined;
-let activeTabUrl: string = ''; // Hostname of the active tab
+let activeTabUrl: string = ''; 
 let lastTick: number = Date.now();
 let tabUsage: Visit[] = []; 
 
@@ -70,7 +70,6 @@ setInterval(recordUsage, 1000);
 setInterval(() => {
   recordUsage();
   if (tabUsage.length) {
-    services.postSites(tabUsage).then(() => { tabUsage = [] }); // Clear usage if request succeeds
+    services.postSites(tabUsage).then(() => { tabUsage = [] }); 
   }
 }, 30000);
-

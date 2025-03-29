@@ -1,7 +1,7 @@
 import { ButtonProps } from "../../../types"
 import './Button.css';
 
-function Buttons({ selectedPeriod, setSelectedPeriod }: ButtonProps) {
+function Buttons ({selectedPeriod, setSelectedPeriod}: ButtonProps) {
 
   if (selectedPeriod === 'last24h') {
     return (
