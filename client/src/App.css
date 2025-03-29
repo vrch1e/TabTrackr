@@ -4,8 +4,8 @@
   height: 500px;
   width: 400px;
   background-color: #caf0f8;
-  overflow-y: auto; /* Enables vertical scrolling */
-  scrollbar-width: none; /* Hides scrollbar in Firefox */
+  overflow-y: auto;
+  scrollbar-width: none;
 }
 
 #dashboard {

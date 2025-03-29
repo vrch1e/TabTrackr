@@ -1,5 +1,4 @@
 import { Visit } from '../../../types';
-// @ts-ignore
 import './TabItem.css'
 
 export default function TabItem({ site, timeSpent }: Visit) {

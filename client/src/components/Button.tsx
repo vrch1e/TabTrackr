@@ -1,10 +1,7 @@
 import { ButtonProps } from "../../../types"
-// @ts-ignore
 import './Button.css';
 
-function Buttons ({selectedPeriod, setSelectedPeriod}: ButtonProps) {
-
-  // todo done: fixed indentation
+function Buttons({ selectedPeriod, setSelectedPeriod }: ButtonProps) {
 
   if (selectedPeriod === 'last24h') {
     return (

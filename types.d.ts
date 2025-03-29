@@ -1,5 +1,3 @@
-// todo done: considered a union type but prefered clear splitting by usage
-
 export interface Visit {
   id?: number,
   site: string,
