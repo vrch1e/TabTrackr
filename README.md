@@ -3,7 +3,7 @@
 A chrome extension that tracks tab usage
 
 <p align="center">
-  <img src="images/TabTrackr.png" />
+  <img src="TabTrackr.png" />
 </p>
 
 # Getting started
