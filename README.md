@@ -1,19 +1,31 @@
 # TabTrackr
+
 A chrome extension that tracks tab usage
 
-in the public folder, you'll find a background.js file which is responsible for running in the background and tracking the tab usage data. This data will be sent to the server every 30 seconds as you'll see in the setInterval.
+<p align="center">
+  <img src="images/TabTrackr.png" />
+</p>
 
-The manifest.json file is responsible for providing metadata to the browser, e.g. extension permissions, icons, and important files like background.js, and index.html.
+# Getting started
 
+  * In the server folder, run 'npm install'. Then 'npm run dev'.
+  * In the client folder, run 'npm install'. Then 'npm run dev'.
+  * Go to chrome://extensions/ in the browser, and click 'load unpacked' in the top left. Then open the dist folder.
+  * Turn the extension on and you should see the extension running
 
-FOR USE:
+# Tech stack
 
-1: Fork and clone the repo
+* Client
+  * Typescript
+  * React + Vite
 
-2: In the client folder, run 'npm install'. Then 'npm run build'.
+* Server
+  * Typescript
+  * PostgreSQL
+  * Sequelize
+  * Express
 
-3: In the server folder, run 'npm install'. Then 'nodemon server.js'.
+# Contributors
 
-4: Go to chrome://extensions/ in the browser, and click 'load unpacked' in the top left. Then open the dist folder.
-
-5: Turn the extension on and you should see the extension running without errors.
+  * Archie Maunder-Taylor [Github](https://github.com/a-rchi-e)
+  * Paul Paumier Martinez [Github](https://github.com/manawgh)
