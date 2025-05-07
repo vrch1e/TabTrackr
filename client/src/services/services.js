@@ -1,6 +1,6 @@
 
 const getSites = async (period) => {
-    const url = `http://localhost:3000/stats/${period}`
+    const url = `http://localhost:3010/stats/${period}`
     try {
         const response = await fetch(url);
         if (!response.ok) {

@@ -82,7 +82,7 @@ setInterval(() => {
       timespent,
     }));
     console.log("Sending tabUsage:", usageData);
-    fetch("http://localhost:3000/visits", {
+    fetch("http://localhost:3010/visits", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ usage: usageData }),

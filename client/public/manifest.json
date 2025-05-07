@@ -1,16 +1,16 @@
 {
     "name": "TabTrackr",
-    "description": "Base Level Extension",
+    "description": "Track your time usage on all of your tabs, maximize productivity and spot unwanted patterns over time",
     "version": "1.0",
     "manifest_version": 3,
     "action": {
         "default_popup": "index.html",
-        "default_icon": "tabtrackrzoomed.png"
+        "default_icon": "myLogo48.png"
     },
     "icons": {
-        "16": "tabtrackrzoomed.png",
-        "48": "tabtrackrzoomed.png",
-        "128": "tabtrackr.png"
+        "16": "myLogo48.png",
+        "48": "myLogo128.png",
+        "128": "myLogo128.png"
     },
     "permissions": [
         "tabs",
