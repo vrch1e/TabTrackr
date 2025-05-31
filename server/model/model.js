@@ -10,7 +10,11 @@ const TimeTracking = sequelize.define('TimeTracking', {
   },
   site: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: false
+  },
+  url: {
+    type: DataTypes.STRING,
+    allowNull: false
   },
   timespent: {
     type: DataTypes.INTEGER,
