@@ -7,7 +7,9 @@ console.log('runningggggggggggggggggggggggggggggg')
 // Functions:
 
 let formatUrl = (url) => {
-
+  let split_url = url.split('/')
+  shortened_url = split_url[2]
+  return shortened_url
 }
 
 let startSiteTimer = (url) => {
@@ -28,14 +30,26 @@ let updateSession = (url) => {
   siteTimer = 0
 }
 
+async function getCurrentTab() {
+  let queryOptions = { active: true, lastFocusedWindow: true };
+  // `tab` will either be a `tabs.Tab` instance or `undefined`.
+  let [tab] = await chrome.tabs.query(queryOptions);
+  let formattedUrl = formatUrl(tab.url);
+  currentUrl = formattedUrl
+  startSiteTimer(currentUrl)
+  console.log('started timer: ', currentUrl)
+}
+
 // Listeners:
+
+getCurrentTab()
 
 chrome.tabs.onActivated.addListener(function(activeInfo) { // listens for when tab changes, fires callback function
   if (currentUrl) {
     updateSession(currentUrl); // if previous listeners have been triggered, thisSession will get updated with the last siteTimer
   }
   chrome.tabs.get(activeInfo.tabId, function(tab) { // full tab object passed into callback function by chrome api
-    currentUrl = tab.url
+    currentUrl = formatUrl(tab.url);
     startSiteTimer(currentUrl)
     console.log(thisSession)
   });
@@ -47,7 +61,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     if (currentUrl) {
       updateSession(currentUrl);
     }
-    currentUrl = changeInfo.url;
+    currentUrl = formatUrl(changeInfo.url);
     startSiteTimer(currentUrl);
     console.log(thisSession);
   }
