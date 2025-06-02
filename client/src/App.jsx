@@ -18,7 +18,7 @@ function App() {
     const intervalId = setInterval(fetchSites, 10000)
     return () => clearInterval(intervalId)
 
-  }, [selectedPeriod])
+  }, [selectedPeriod]) // title's text re-renders when the value of selected period changes
 
   return (
     <>

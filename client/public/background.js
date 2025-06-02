@@ -30,7 +30,7 @@ let updateSession = (url) => {
   siteTimer = 0
 }
 
-async function getCurrentTab() {
+async function getFirstTab() {
   let queryOptions = { active: true, lastFocusedWindow: true };
   // `tab` will either be a `tabs.Tab` instance or `undefined`.
   let [tab] = await chrome.tabs.query(queryOptions);
@@ -42,7 +42,7 @@ async function getCurrentTab() {
 
 // Listeners:
 
-getCurrentTab()
+getFirstTab()
 
 chrome.tabs.onActivated.addListener(function(activeInfo) { // listens for when tab changes, fires callback function
   if (currentUrl) {

@@ -63,4 +63,8 @@ const clearAll = async (req, res) => {
     res.json({ msg: "all data deleted" })
 }
 
-export default { getStats, logVisit, clearAll }
+const testEc2 = async (req, res) => {
+    res.json({"success": "success"})
+}
+
+export default { getStats, logVisit, clearAll, testEc2 }

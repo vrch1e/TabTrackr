@@ -15,5 +15,8 @@ const getSites = async (period) => {
     }
 }
 
+const postSites = async () => {
 
-export default { getSites}
+}
+
+export default { getSites, postSites }
