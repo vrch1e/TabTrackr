@@ -8,8 +8,8 @@ const sequelize = new Sequelize('tabtrackr_db', process.env.DB_USERNAME, process
     logging: false,
     dialectOptions: {
         ssl: {
-            require: true,
-            rejectUnauthorized: false, // use true with the RDS CA cert
+            require: true, // because pg_hma.conf 
+            rejectUnauthorized: false,
         },
     },
 });
