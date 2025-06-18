@@ -19,7 +19,7 @@ const wss = new WebSocketServer({ noServer: true });
 
 // Handle WS upgrade manually
 server.on('upgrade', (req, socket, head) => {
-  // If you only want to accept WS on /socket, check path here:
+
   if (req.url !== '/socket') {
     socket.destroy();
     return;

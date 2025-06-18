@@ -66,3 +66,15 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     console.log(thisSession);
   }
 });
+
+const websocket = new WebSocket('ws://localhost:3010/socket');
+console.log('websocket line compiled')
+websocket.onopen = (event) => {
+  console.log('WSS opened')
+};
+
+setInterval(() => {
+  websocket.send(JSON.stringify(thisSession))
+  console.log('session sent:', thisSession)
+  thisSession = {}
+}, 10000)
