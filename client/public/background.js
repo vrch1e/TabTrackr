@@ -1,33 +1,29 @@
 let thisSession = {}
-let siteTimer = 0;
-let timerId;
+let siteTimer = null;
 let currentUrl;
-console.log('runningggggggggggggggggggggggggggggg')
+console.log('running: ', thisSession)
 
 // Functions:
 
-let formatUrl = (url) => {
+let formatUrl = (url) => { // makes the url something like website.com
   let split_url = url.split('/')
   shortened_url = split_url[2]
   return shortened_url
 }
 
-let startSiteTimer = (url) => {
-  if (timerId) {
-    clearInterval(timerId);
-    timerId = false;
-  }
-  siteTimer = 0
-  timerId = setInterval(() => {siteTimer += 1000}, 1000)
+let startSiteTimer = () => {
+  siteTimer = Date.now()
 }
 
 let updateSession = (url) => {
-  if (timerId) {
-    clearInterval(timerId);
-    timerId = false;
-  }
-  thisSession[url] ? thisSession[url] += siteTimer : thisSession[url] = siteTimer
-  siteTimer = 0
+
+  if (!siteTimer) return
+
+  // time spent on tab
+  let elapsed = Date.now() - siteTimer
+
+  // if url is already in session object, update the url time. Otherwise initiate it as current elapsed time.
+  thisSession[url] ? thisSession[url] += elapsed : thisSession[url] = elapsed 
 }
 
 async function getFirstTab() {
@@ -36,7 +32,7 @@ async function getFirstTab() {
   let [tab] = await chrome.tabs.query(queryOptions);
   let formattedUrl = formatUrl(tab.url);
   currentUrl = formattedUrl
-  startSiteTimer(currentUrl)
+  startSiteTimer()
   console.log('started timer: ', currentUrl)
 }
 
@@ -50,8 +46,8 @@ chrome.tabs.onActivated.addListener(function(activeInfo) { // listens for when t
   }
   chrome.tabs.get(activeInfo.tabId, function(tab) { // full tab object passed into callback function by chrome api
     currentUrl = formatUrl(tab.url);
-    startSiteTimer(currentUrl)
-    console.log(thisSession)
+    startSiteTimer()
+    console.log('new tab: ', currentUrl)
   });
 });
 
@@ -62,10 +58,33 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
       updateSession(currentUrl);
     }
     currentUrl = formatUrl(changeInfo.url);
-    startSiteTimer(currentUrl);
-    console.log(thisSession);
+    startSiteTimer();
+    console.log('tab updated, new session: ', thisSession)
   }
 });
+
+chrome.windows.onFocusChanged.addListener((windowId) => {
+
+    if (windowId === chrome.windows.WINDOW_ID_NONE) {
+      // browser lost focus → stop timing
+      if (currentUrl) {
+        updateSession(currentUrl)
+        siteTimer = null;
+        console.log('focus out of chrome')
+      }
+    } else {
+    // browser gained focus → find current tab
+    chrome.tabs.query({ active: true, windowId }, (tabs) => {
+      if (tabs.length) {
+        currentUrl = formatUrl(tabs[0].url);
+        startSiteTimer()
+        console.log('focus into chrome')
+      }
+    });
+  }
+});
+
+// Websocket connection:
 
 const websocket = new WebSocket('ws://localhost:3010/socket');
 console.log('websocket line compiled')
@@ -73,8 +92,16 @@ websocket.onopen = (event) => {
   console.log('WSS opened')
 };
 
+chrome.runtime.onSuspend.addListener(() => {
+  websocket.send(JSON.stringify(thisSession))
+  websocket.send(JSON.stringify({'background service suspended': true}))
+
+  console.log('chrome closed, session sent:', thisSession)
+  thisSession = {}
+})
+
 setInterval(() => {
   websocket.send(JSON.stringify(thisSession))
-  console.log('session sent:', thisSession)
+  console.log('15 secs up, session sent:', thisSession)
   thisSession = {}
-}, 10000)
+}, 15000)
