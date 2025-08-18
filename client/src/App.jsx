@@ -1,11 +1,27 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import services from './services/services';
 import TabList from './components/TabList';
 import './App.css'
 
 function App() {
-  const [tabsToday, setTabsData] = useState([])
-  const [selectedPeriod, setSelectedPeriod] = useState('today')
+  const [tabs, setTabsData] = useState([])
+  const [selectedPeriod, setSelectedPeriod] = useState('today');
+  const websocketRef = useRef(null);
+
+  useEffect(() => {
+    websocketRef.current = new WebSocket('ws://localhost:3010/socket')
+
+    websocketRef.current.onmessage = (event) => {
+      let data = JSON.parse(event.data);
+      console.log('parsed data in app.jsx: ', data);
+      console.log('hi')
+      console.log('the tab data im accreting: ', tabs)
+    };
+
+    return () => {
+      websocketRef.current.close()
+    }
+  }, [])
 
   useEffect(() => {
     const fetchSites = async () => {
@@ -15,10 +31,8 @@ function App() {
       console.log('re-rendered')
     }
     fetchSites()
-    const intervalId = setInterval(fetchSites, 10000)
-    return () => clearInterval(intervalId)
-
-  }, [selectedPeriod]) // title's text re-renders when the value of selected period changes
+    return;
+  }, [selectedPeriod]) // Re-renders App() and updates tab data whenever user changes time period
 
   return (
     <>
@@ -28,7 +42,7 @@ function App() {
         <Buttons />
       </div>
       <hr></hr>
-      <TabList tabs={tabsToday} />
+      <TabList tabs={tabs} />
     </div>
     </>
   )

@@ -30,11 +30,19 @@ server.on('upgrade', (req, socket, head) => {
   });
 });
 
-wss.on('connection', (ws) => {
-  ws.on('message', (data) => {
-    console.log('Received:', data.toString());
+wss.on('connection', (ws) => { // When there's a websocket connection with the client:
+  ws.on('message', (data) => { // 'data' is the tab usage object.
+    let parsed = JSON.parse(data)
+    console.log('Received:', parsed);
+    
+    if (parsed.type === 'usage') {
+      wss.clients.forEach(client => {
+        if (client !== ws && client.readyState === WebSocket.OPEN) {
+          client.send(JSON.stringify(parsed));
+        }
+      });
+    }
   });
-  ws.send('Connected to WebSocket!');
 });
 
 server.listen(port, '0.0.0.0', () => {

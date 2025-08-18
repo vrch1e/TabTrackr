@@ -1,4 +1,4 @@
-let thisSession = {}
+let thisSession = {'type': 'usage'}
 let siteTimer = null;
 let currentUrl;
 console.log('running: ', thisSession)
@@ -103,5 +103,5 @@ chrome.runtime.onSuspend.addListener(() => {
 setInterval(() => {
   websocket.send(JSON.stringify(thisSession))
   console.log('15 secs up, session sent:', thisSession)
-  thisSession = {}
+  thisSession = {'type': 'usage'}
 }, 15000)
