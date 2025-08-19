@@ -1,5 +1,6 @@
 import TimeTracking from "../model/model.js";
 import sequelize from "../config/database.js";
+import { saveVisits } from './service.js';
 import { Op } from 'sequelize'
 
 const getStats = async (req, res) => {
@@ -36,25 +37,15 @@ const getStats = async (req, res) => {
 
 
 const logVisit = async (req, res) => {
-    const visits = req.body.usage;
-
-    if (!Array.isArray(visits)) {
-        return res.status(400).json({ error: "Expected an array of visits" });
-    }
-
-    // Create a new entry for each session
-    await Promise.all(
-        visits.map(async ({ site, timespent }) => {
-            await TimeTracking.create({
-                site,
-                timespent
-            });
-        })
-    );
-
+  try {
+    await saveVisits(req.body.usage);
+    console.log('successful log query');
     res.status(201).json({ msg: "Visits logged" });
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ error: err.message });
+  }
 };
-
 
 const clearAll = async (req, res) => {
     await TimeTracking.destroy({
