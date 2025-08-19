@@ -26,7 +26,7 @@ let updateSession = (url) => {
   if (thisSession['usage'][formatUrl(url)]) {
     thisSession['usage'][formatUrl(url)]['timespent'] += elapsed
   } else {
-    thisSession['usage'][formatUrl(url)] = {'url': url, 'timespent': elapsed}
+    thisSession['usage'][formatUrl(url)] = {'site': formatUrl(url), 'url': url, 'timespent': elapsed}
   }
 }
 
