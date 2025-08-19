@@ -1,7 +1,7 @@
-let thisSession = {'type': 'usage'}
+let thisSession = {'usage': {}}
 let siteTimer = null;
 let currentUrl;
-console.log('running: ', thisSession)
+console.log('running: ', thisSession['usage'])
 
 // Functions:
 
@@ -17,21 +17,24 @@ let startSiteTimer = () => {
 
 let updateSession = (url) => {
 
-  if (!siteTimer) return
+  if (!siteTimer) return;
 
   // time spent on tab
   let elapsed = Date.now() - siteTimer
 
   // if url is already in session object, update the url time. Otherwise initiate it as current elapsed time.
-  thisSession[url] ? thisSession[url] += elapsed : thisSession[url] = elapsed 
+  if (thisSession['usage'][formatUrl(url)]) {
+    thisSession['usage'][formatUrl(url)]['timespent'] += elapsed
+  } else {
+    thisSession['usage'][formatUrl(url)] = {'url': url, 'timespent': elapsed}
+  }
 }
 
 async function getFirstTab() {
   let queryOptions = { active: true, lastFocusedWindow: true };
   // `tab` will either be a `tabs.Tab` instance or `undefined`.
   let [tab] = await chrome.tabs.query(queryOptions);
-  let formattedUrl = formatUrl(tab.url);
-  currentUrl = formattedUrl
+  currentUrl = tab.url
   startSiteTimer()
   console.log('started timer: ', currentUrl)
 }
@@ -45,7 +48,7 @@ chrome.tabs.onActivated.addListener(function(activeInfo) { // listens for when t
     updateSession(currentUrl); // if previous listeners have been triggered, thisSession will get updated with the last siteTimer
   }
   chrome.tabs.get(activeInfo.tabId, function(tab) { // full tab object passed into callback function by chrome api
-    currentUrl = formatUrl(tab.url);
+    currentUrl = tab.url;
     startSiteTimer()
     console.log('new tab: ', currentUrl)
   });
@@ -57,9 +60,8 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     if (currentUrl) {
       updateSession(currentUrl);
     }
-    currentUrl = formatUrl(changeInfo.url);
+    currentUrl = changeInfo.url;
     startSiteTimer();
-    console.log('tab updated, new session: ', thisSession)
   }
 });
 
@@ -76,7 +78,7 @@ chrome.windows.onFocusChanged.addListener((windowId) => {
     // browser gained focus → find current tab
     chrome.tabs.query({ active: true, windowId }, (tabs) => {
       if (tabs.length) {
-        currentUrl = formatUrl(tabs[0].url);
+        currentUrl = tabs[0].url;
         startSiteTimer()
         console.log('focus into chrome')
       }
@@ -97,11 +99,11 @@ chrome.runtime.onSuspend.addListener(() => {
   websocket.send(JSON.stringify({'background service suspended': true}))
 
   console.log('chrome closed, session sent:', thisSession)
-  thisSession = {}
+  thisSession = {'usage': {}}
 })
 
 setInterval(() => {
   websocket.send(JSON.stringify(thisSession))
-  console.log('15 secs up, session sent:', thisSession)
-  thisSession = {'type': 'usage'}
+  console.log('15 secs up, session sent:', thisSession['usage'])
+  thisSession = {'usage': {}}
 }, 15000)

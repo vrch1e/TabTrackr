@@ -14,8 +14,6 @@ function App() {
     websocketRef.current.onmessage = (event) => {
       let data = JSON.parse(event.data);
       console.log('parsed data in app.jsx: ', data);
-      console.log('hi')
-      console.log('the tab data im accreting: ', tabs)
     };
 
     return () => {
