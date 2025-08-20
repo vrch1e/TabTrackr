@@ -4,7 +4,8 @@ import { saveVisits } from './service.js';
 import { Op } from 'sequelize'
 
 const getStats = async (req, res) => {
-    const { period } = req.params;
+    const { period, userId } = req.params;
+    console.log('made it to backend, params: ', period, userId)
     let timeFrame;
 
     if (period === 'today') {
@@ -20,7 +21,8 @@ const getStats = async (req, res) => {
     // Sum up timespent for each site within the timeframe
     const visits = await TimeTracking.findAll({
         where: {
-            createdAt: { [Op.gte]: timeFrame }
+            createdAt: { [Op.gte]: timeFrame },
+            userId
         },
         attributes: [
             'site', 

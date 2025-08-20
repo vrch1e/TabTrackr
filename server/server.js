@@ -41,7 +41,7 @@ wss.on('connection', (ws) => { // When there's a websocket connection with the c
       console.log('parsed usage: ', parsed['usage'])
       for(const site in parsed['usage']) {
         if (parsed['usage'][site]['url'] != 'about:blank') { // makes sure we don't log a chrome popup that was in focus
-          let siteData = {'site': parsed['usage'][site]['site'], 'url': parsed['usage'][site]['url'], 'timespent': parsed['usage'][site]['timespent']}
+          let siteData = {'site': parsed['usage'][site]['site'], 'url': parsed['usage'][site]['url'], 'timespent': parsed['usage'][site]['timespent'], 'userId': parsed['userId']}
           usageDataToLog['usage'].push(siteData)
         }
       }

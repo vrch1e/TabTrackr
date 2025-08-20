@@ -22,11 +22,21 @@ function App() {
   }, [])
 
   useEffect(() => {
-    const fetchSites = async () => {
-      const data = await services.getSites(selectedPeriod)
-      console.log('data: ', data)
-      setTabsData(data)
-      console.log('re-rendered')
+
+    const fetchSites = async () => { // get userId from their chromes storage
+      chrome.storage.local.get(['userId'], async (result) => {
+        if (!result.userId) {
+          console.log('no userId')
+        }
+
+        console.log('if statement didnt trigger, userId is here: ', result.userId)
+
+        let userId = result.userId
+        const data = await services.getSites(selectedPeriod, userId)
+        console.log('data: ', data)
+        setTabsData(data)
+        console.log('re-rendered')
+      })
     }
     fetchSites()
     return;

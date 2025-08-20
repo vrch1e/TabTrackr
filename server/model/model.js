@@ -8,6 +8,10 @@ const TimeTracking = sequelize.define('TimeTracking', {
     allowNull: false,
     primaryKey: true
   },
+    userId: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
   site: {
     type: DataTypes.STRING,
     allowNull: false
