@@ -9,7 +9,7 @@ function App() {
   const websocketRef = useRef(null);
 
   useEffect(() => {
-    websocketRef.current = new WebSocket('ws://localhost:3010/socket')
+    websocketRef.current = new WebSocket('ws://locahost:3010/socket')
 
     websocketRef.current.onmessage = (event) => {
       let data = JSON.parse(event.data);

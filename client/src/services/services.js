@@ -1,6 +1,6 @@
 
 const getSites = async (period, userId) => {
-    const url = `http://localhost:3010/stats/${period}/${userId}`
+    const url = `http://13.41.70.19:3010/stats/${period}/${userId}`
     try {
         const response = await fetch(url);
         if (!response.ok) {
@@ -18,7 +18,7 @@ const getSites = async (period, userId) => {
 
 
 const postSites = async () => {
-    const url = `http://localhost:3010/`
+    const url = `http://13.41.70.19:3010/`
     return;
 
 }

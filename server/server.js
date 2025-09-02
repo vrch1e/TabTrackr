@@ -34,7 +34,6 @@ server.on('upgrade', (req, socket, head) => {
 wss.on('connection', (ws) => { // When there's a websocket connection with the client:
   ws.on('message', (data) => { // 'data' is the tab usage object.
     let parsed = JSON.parse(data)
-    console.log('Received:', parsed);
 
     if (parsed['usage']) {
       let usageDataToLog = {'usage': []}
