@@ -1,84 +1,68 @@
-import { useState, useEffect, useRef } from 'react'
-import services from './services/services';
-import TabList from './components/TabList';
-import './App.css'
+import { useState, useEffect, useRef } from "react";
+import services from "./services/services";
+import TabList from "./components/TabList";
+import "./App.css";
 
 function App() {
-  const [tabs, setTabsData] = useState([])
-  const [selectedPeriod, setSelectedPeriod] = useState('today');
+  const [tabs, setTabs] = useState([]);
+  const [period, setPeriod] = useState("today");
   const websocketRef = useRef(null);
 
+  // Fetching sites whenever period changes
   useEffect(() => {
-    websocketRef.current = new WebSocket('ws://locahost:3010/socket')
-
-    websocketRef.current.onmessage = (event) => {
-      let data = JSON.parse(event.data);
-      console.log('parsed data in app.jsx: ', data);
-    };
-
-    return () => {
-      websocketRef.current.close()
-    }
-  }, [])
-
-  useEffect(() => {
-
-    const fetchSites = async () => { // get userId from their chromes storage
-      chrome.storage.local.get(['userId'], async (result) => {
-        if (!result.userId) {
-          console.log('no userId')
+    const fetchSites = async () => {
+      chrome.storage.local.get(["userId"], async (result) => {
+        const userId = result?.userId;
+        if (!userId) {
+          console.warn("No userId found in storage");
+          return;
         }
 
-        console.log('if statement didnt trigger, userId is here: ', result.userId)
+        console.log("UserId found:", userId);
 
-        let userId = result.userId
-        const data = await services.getSites(selectedPeriod, userId)
-        console.log('data: ', data)
-        setTabsData(data)
-        console.log('re-rendered')
-      })
-    }
-    fetchSites()
-    return;
-  }, [selectedPeriod]) // Re-renders App() and updates tab data whenever user changes time period
+        try {
+          const data = await services.getSites(period, userId);
+          setTabs(data);
+          console.log("Sites updated:", data);
+        } catch (err) {
+          console.error("Failed to fetch sites:", err);
+        }
+      });
+    };
+
+    fetchSites();
+  }, [period]);
 
   return (
-    <>
-    <div id='container'>
-      <div id='dashboard'>
-        <h1>Time Tracked: {selectedPeriod}</h1>
-        <Buttons />
-      </div>
-      <hr></hr>
-      <TabList tabs={tabs} />
+    <div id="container">
+      <header id="dashboard">
+        <PeriodDropdown period={period} setPeriod={setPeriod} />
+      </header>
+      <hr />
+      <main>
+        <TabList tabs={tabs} />
+      </main>
     </div>
-    </>
-  )
-
-  function Buttons() {
-    if (selectedPeriod === 'today') {
-      return (
-        <>
-        <button onClick={() => {setSelectedPeriod('week')}}>Week</button>
-        <button onClick={() => {setSelectedPeriod('month')}}>Month</button>
-        </>
-      )
-    } else if (selectedPeriod === 'week') {
-      return (
-        <>
-        <button onClick={() => {setSelectedPeriod('today')}}>Today</button>
-        <button onClick={() => {setSelectedPeriod('month')}}>Month</button>
-        </>
-      )
-    } else {
-      return (
-        <>
-        <button onClick={() => {setSelectedPeriod('today')}}>Today</button>
-        <button onClick={() => {setSelectedPeriod('week')}}>Week</button>
-        </>
-      )
-    }
-  }
+  );
 }
 
-export default App
+// Dropdown component
+function PeriodDropdown({ period, setPeriod }) {
+  return (
+    <div className="period-dropdown">
+      <select
+        id="period"
+        className="period-select"
+        value={period}
+        onChange={(e) => setPeriod(e.target.value)}
+      >
+        <option value="today">Today</option>
+        <option value="week">This Week</option>
+        <option value="month">This Month</option>
+      </select>
+    </div>
+  );
+}
+
+export default App;
+

@@ -1,14 +1,14 @@
-#container {
+/* #container {
   display: flex;
   flex-direction: column;
   height: 500px;
   width: 400px;
   background-color: #caf0f8;
-  overflow-y: auto; /* Enables vertical scrolling */
-  scrollbar-width: none; /* Hides scrollbar in Firefox */
-}
+  overflow-y: auto; 
+  scrollbar-width: none;
+} */
 
-#dashboard {
+/* #dashboard {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -38,4 +38,83 @@ hr {
   border-top: 1px solid #0077b6;
   margin-top: 1em 0;
   padding: 0;
+} */
+
+/* Container */
+#container {
+  display: flex;
+  flex-direction: column;
+  height: 500px;
+  width: 420px;
+  background-color: #f8fbfd; /* cleaner off-white */
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  scrollbar-width: none; /* Hide scrollbar in Firefox */
 }
+
+/* Dashboard header */
+#dashboard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 18px;
+  background-color: #ffffff;
+  border-bottom: 2px solid #e0e6ed;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1b263b;
+}
+
+/* Dropdown wrapper */
+.period-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.period-label {
+  font-size: 0.85rem;
+  color: #415a77;
+  font-weight: 500;
+}
+
+/* Dropdown select styling */
+.period-select {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #778da9;
+  background-color: #e0e6ed;
+  color: #1b263b;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  outline: none;
+  transition: 0.2s ease-in-out;
+}
+
+.period-select:hover {
+  background-color: #d0dae4;
+}
+
+.period-select:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 4px rgba(13, 110, 253, 0.3);
+}
+
+/* Divider line */
+hr {
+  display: block;
+  height: 1px;
+  width: 100%;
+  border: 0;
+  background-color: #e0e6ed;
+  margin: 0;
+}
+
