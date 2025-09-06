@@ -66,10 +66,10 @@ hr {
 }
 
 h1 {
-  margin: 0;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #1b263b;
+  margin-right: 10px;
+  font-size: 1rem;
+  font-weight: 400;
+  color: #415a77;
 }
 
 /* Dropdown wrapper */

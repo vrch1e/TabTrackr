@@ -1,12 +1,13 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import services from "./services/services";
 import TabList from "./components/TabList";
+import TotalTime from "./components/TotalTime";
 import "./App.css";
 
 function App() {
   const [tabs, setTabs] = useState([]);
+  const [allTime, setAllTime] = useState(0);
   const [period, setPeriod] = useState("today");
-  const websocketRef = useRef(null);
 
   // Fetching sites whenever period changes
   useEffect(() => {
@@ -23,7 +24,14 @@ function App() {
         try {
           const data = await services.getSites(period, userId);
           setTabs(data);
-          console.log("Sites updated:", data);
+
+          let addedTime = 0;
+
+          for (let i in data) {
+            addedTime += Number(data[i].totalTimeSpent);
+          }
+
+          setAllTime(addedTime);
         } catch (err) {
           console.error("Failed to fetch sites:", err);
         }
@@ -36,7 +44,9 @@ function App() {
   return (
     <div id="container">
       <header id="dashboard">
+        <h1>Time Tracked</h1>
         <PeriodDropdown period={period} setPeriod={setPeriod} />
+        <TotalTime allTime={allTime}/>
       </header>
       <hr />
       <main>
@@ -59,6 +69,7 @@ function PeriodDropdown({ period, setPeriod }) {
         <option value="today">Today</option>
         <option value="week">This Week</option>
         <option value="month">This Month</option>
+        <option value="all">All Time</option>
       </select>
     </div>
   );
