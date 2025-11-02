@@ -4,16 +4,25 @@ import { saveVisits } from './service.js';
 import { Op } from 'sequelize'
 
 const getStats = async (req, res) => {
-    const { period, userId } = req.params;
+    const { period, userId, timezone } = req.params;
     console.log('made it to backend, params: ', period, userId)
     let timeFrame;
 
+    let date = new Date()
+    let ms = (
+        (date.getHours() * 3600) +
+        (date.getMinutes() * 60) +
+        date.getSeconds()
+    ) * 1000;
+
     if (period === 'today') {
-        timeFrame = new Date(new Date() - 24 * 60 * 60 * 1000);
+        timeFrame = date - ms;
     } else if (period === 'week') {
-        timeFrame = new Date(new Date() - 7 * 24 * 60 * 60 * 1000);
+        timeFrame = date - 7 * 24 * 60 * 60 * 1000;
     } else if (period === 'month') {
-        timeFrame = new Date(new Date() - 30 * 24 * 60 * 60 * 1000);
+        timeFrame = date - 30 * 24 * 60 * 60 * 1000;
+    } else if (period === 'all') {
+        timeFrame = 0;
     } else {
         return res.status(400).json({ error: "Invalid period" });
     }
@@ -21,7 +30,7 @@ const getStats = async (req, res) => {
     // Sum up timespent for each site within the timeframe
     const visits = await TimeTracking.findAll({
         where: {
-            createdAt: { [Op.gte]: timeFrame },
+            createdAt: { [Op.gte]: new Date(timeFrame) },
             userId
         },
         attributes: [
@@ -32,11 +41,30 @@ const getStats = async (req, res) => {
         order: [[sequelize.fn('SUM', sequelize.col('timespent')), 'DESC']],
         raw: true
     });
-    
 
     res.status(200).json(visits);
 };
 
+const getFirstEntry = async (req, res) => {
+
+    const { userId } = req.params;
+    const firstEntry = await TimeTracking.findOne({
+        where: { userId },
+        order: [['createdAt', 'ASC']],
+        attributes: ['createdAt'],
+        raw: true
+    });
+
+    if (!firstEntry) {
+        res.status(400).json({ message: 'No usage data found for this user' });
+    }
+
+    const totalDaysUsing = Math.floor(
+        (Date.now() - new Date(firstEntry.createdAt)) / (1000 * 60 * 60 * 24)
+    )
+
+    res.status(200).json({ totalDaysUsing });
+}
 
 const logVisit = async (req, res) => {
   try {
@@ -60,4 +88,4 @@ const testEc2 = async (req, res) => {
     res.json({"success": "success"})
 }
 
-export default { getStats, logVisit, clearAll, testEc2 }
+export default { getStats, getFirstEntry, logVisit, clearAll, testEc2 }
