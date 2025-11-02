@@ -8,6 +8,7 @@ function App() {
   const [tabs, setTabs] = useState([]);
   const [allTime, setAllTime] = useState(0);
   const [period, setPeriod] = useState("today");
+  const [daysDownloaded, setDaysDownloaded] = useState(0)
 
   // Fetching sites whenever period changes
   useEffect(() => {
@@ -41,11 +42,31 @@ function App() {
     fetchSites();
   }, [period]);
 
+  useEffect(() => {
+    chrome.storage.local.get(['userId'], async (result) => {
+      const userId = result?.userId;
+      if (!userId) {
+        console.warn("No userId found in storage");
+        return;
+      }
+
+      try {
+
+        const totalDays = await services.getFirstEntry(userId);
+        
+        setDaysDownloaded(totalDays.totalDaysUsing);
+
+      } catch (error) {
+        console.error(error);
+      }
+    })
+  }, [])
+
   return (
     <div id="container">
       <header id="dashboard">
         <h1>Time Tracked</h1>
-        <PeriodDropdown period={period} setPeriod={setPeriod} />
+        <PeriodDropdown period={period} setPeriod={setPeriod} daysDownloaded={daysDownloaded} />
         <TotalTime allTime={allTime}/>
       </header>
       <hr />
@@ -57,7 +78,7 @@ function App() {
 }
 
 // Dropdown component
-function PeriodDropdown({ period, setPeriod }) {
+function PeriodDropdown({ period, setPeriod, daysDownloaded }) {
   return (
     <div className="period-dropdown">
       <select
@@ -69,7 +90,7 @@ function PeriodDropdown({ period, setPeriod }) {
         <option value="today">Today</option>
         <option value="week">This Week</option>
         <option value="month">This Month</option>
-        <option value="all">All Time</option>
+        <option value="all">All Time{daysDownloaded ? `: ${daysDownloaded} days` : ""}</option>
       </select>
     </div>
   );

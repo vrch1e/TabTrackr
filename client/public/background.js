@@ -110,7 +110,7 @@ function backgroundInit(userId) {
 
   // Websocket connection:
 
-  const websocket = new WebSocket('ws://13.41.70.19:3010/socket');
+  const websocket = new WebSocket('ws://localhost:3010/socket');
   console.log('websocket line compiled')
   websocket.onopen = (event) => {
     console.log('WSS opened')

@@ -9,7 +9,7 @@ export default function TotalTime({ allTime }) {
     return (
         <>
         <div id='total-time-container'>
-            <h3>Total Time: {formatTime(allTime)}</h3>
+            <h3>{formatTime(allTime)}</h3>
         </div>
         </>
     )
