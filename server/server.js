@@ -4,13 +4,17 @@ import { saveVisits } from './controller/service.js'
 import { WebSocketServer } from 'ws';
 import cors from 'cors';
 import http from 'http';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url'
 
 const app = express();
 const port = 3010;
-
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 app.use(cors({ origin: '*' }));
 app.use(express.json());
 app.use(router);
+app.use(express.static(path.join(__dirname, '../webapp-client/dist')))
 
 // Create raw HTTP server
 const server = http.createServer(app);

@@ -10,33 +10,41 @@ function App() {
   const [period, setPeriod] = useState("today");
   const [daysDownloaded, setDaysDownloaded] = useState(0)
 
-  // Fetching sites whenever period changes
-  useEffect(() => {
-    const fetchSites = async () => {
-      chrome.storage.local.get(["userId"], async (result) => {
+  async function getUserId() {
+    return new Promise((resolve, reject) => {
+      chrome.storage.local.get(["userId"], (result) => {
         const userId = result?.userId;
         if (!userId) {
           console.warn("No userId found in storage");
-          return;
+          resolve(0);
+        }
+        resolve(userId);
+      })
+    })
+  }
+
+  // Fetching sites whenever period changes
+  useEffect(() => {
+    const fetchSites = async () => {
+
+      const userId = await getUserId()
+
+      console.log("UserId found:", userId);
+
+      try {
+        const data = await services.getSites(period, userId);
+        setTabs(data);
+
+        let addedTime = 0;
+
+        for (let i in data) {
+          addedTime += Number(data[i].totalTimeSpent);
         }
 
-        console.log("UserId found:", userId);
-
-        try {
-          const data = await services.getSites(period, userId);
-          setTabs(data);
-
-          let addedTime = 0;
-
-          for (let i in data) {
-            addedTime += Number(data[i].totalTimeSpent);
-          }
-
-          setAllTime(addedTime);
-        } catch (err) {
-          console.error("Failed to fetch sites:", err);
-        }
-      });
+        setAllTime(addedTime);
+      } catch (err) {
+        console.error("Failed to fetch sites:", err);
+      }
     };
 
     fetchSites();
@@ -62,8 +70,28 @@ function App() {
     })
   }, [])
 
+  async function sendUserId() {
+    const userId = await getUserId();
+    chrome.tabs.create({ url: "http://localhost:3010/" });
+
+    if (!userId) {
+      console.warn('no userId fdlsfjsldfjdslfjs');
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:3010/sessions/create")
+
+
+    } catch (err) {
+      console.error(err)
+    }
+
+  }
+
   return (
     <div id="container">
+      <div id="weblink" onClick={sendUserId}><a className="anchortext">Ascend your productivity</a><p>&nbsp;&gt;:)</p></div>
       <header id="dashboard">
         <h1>Time Tracked</h1>
         <PeriodDropdown period={period} setPeriod={setPeriod} daysDownloaded={daysDownloaded} />

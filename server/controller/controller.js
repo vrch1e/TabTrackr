@@ -2,6 +2,10 @@ import TimeTracking from "../model/model.js";
 import sequelize from "../config/database.js";
 import { saveVisits } from './service.js';
 import { Op } from 'sequelize'
+import crypto from 'node:crypto'
+import { Redis } from '@upstash/redis'
+import dotenv from 'dotenv'
+dotenv.config()
 
 const getStats = async (req, res) => {
     const { period, userId, timezone } = req.params;
@@ -48,6 +52,7 @@ const getStats = async (req, res) => {
 const getFirstEntry = async (req, res) => {
 
     const { userId } = req.params;
+    
     const firstEntry = await TimeTracking.findOne({
         where: { userId },
         order: [['createdAt', 'ASC']],
@@ -64,6 +69,18 @@ const getFirstEntry = async (req, res) => {
     )
 
     res.status(200).json({ totalDaysUsing });
+}
+
+const createSession = async (req, res) => {
+    const { userId } = req.body;
+    const token = crypto.randomBytes(32).toString("hex");
+
+    const redis = new Redis({
+        url: 'https://informed-mink-32248.upstash.io',
+        token: process.env.REDIS_TOKEN,
+    })
+
+    await redis.set(token, userId, {ex: 600})
 }
 
 const logVisit = async (req, res) => {
@@ -88,4 +105,4 @@ const testEc2 = async (req, res) => {
     res.json({"success": "success"})
 }
 
-export default { getStats, getFirstEntry, logVisit, clearAll, testEc2 }
+export default { getStats, getFirstEntry, logVisit, clearAll, testEc2, createSession }

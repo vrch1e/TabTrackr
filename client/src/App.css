@@ -89,3 +89,28 @@ hr {
   background-color: #1a1a1a;
   margin: 0;
 }
+
+.anchortext {
+  color: rgb(156, 156, 255);
+  margin-top: 0px;
+}
+
+#weblink {
+  display: flex;
+  justify-content: row;
+  color: rgb(156, 156, 255);
+}
+
+.anchortext:hover{
+  color: var(--color-accent-hover);
+  text-decoration-line: underline;
+  cursor: pointer;
+}
+
+.anchortext:hover ~ p {
+  color: var(--color-accent-hover);
+}
+
+p {
+  margin: 0;
+}
