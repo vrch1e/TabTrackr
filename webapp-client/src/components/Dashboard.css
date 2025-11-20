@@ -1,0 +1,45 @@
+#dashboard {
+  display: flex;
+  flex-direction: column;
+  width: 12vh;
+  height: 100vh;
+  align-items: top;
+  background-color: #0d0d0d;
+  border-right: 1.5px #474747 solid;
+}
+
+#logo {
+  width: 100px;
+  height: 100px;
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 0.5vh;
+}
+
+.size-6 {
+  height:50px;
+  width: 50px;
+}
+
+.dash-text {
+  margin-top: 1vh;
+}
+
+.dash-button {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 3vh;
+  text-align: center;
+}
+
+.version-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 6em;          
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 3vh;
+  transform: translateY(1px);
+}
