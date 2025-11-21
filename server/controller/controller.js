@@ -89,6 +89,16 @@ const createSession = async (req, res) => {
     // res.status(200).json({ token })
 }
 
+const getUserId = async (req, res) => {
+    const { token } = req.body;
+    const redis = new Redis({
+        url: 'https://informed-mink-32248.upstash.io',
+        token: process.env.REDIS_TOKEN,
+    })
+    const userId = await redis.get(token);
+    res.status(200).json({ userId })
+}
+
 const logVisit = async (req, res) => {
   try {
     await saveVisits(req.body.usage);
@@ -111,4 +121,4 @@ const testEc2 = async (req, res) => {
     res.json({"success": "success"})
 }
 
-export default { getStats, getFirstEntry, logVisit, clearAll, testEc2, createSession }
+export default { getStats, getFirstEntry, logVisit, clearAll, testEc2, createSession, getUserId }

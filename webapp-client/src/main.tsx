@@ -13,8 +13,18 @@ const router = createBrowserRouter([
     Component: App,
     children: [
       {
-        index: true,
         path: 'homepage/:token',
+        loader: async ({ params }) => {
+          const token = params.token;
+          const response = await fetch('http://localhost:3010/session/getuserid', {
+            method: 'POST',
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({ token })
+          })
+
+          const data = await response.json()
+          return { userId: data.userId }
+        },
         Component: Homepage
       },
       {

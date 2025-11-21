@@ -7,6 +7,7 @@ router.get('/stats/:period/:userId', controllers.getStats)
 router.get('/testec2', controllers.testEc2)
 router.post('/visits', controllers.logVisit)
 router.post('/session/create', controllers.createSession)
+router.post('/session/getuserid', controllers.getUserId)
 router.delete('/clearall', controllers.clearAll)
 
 export default router;
