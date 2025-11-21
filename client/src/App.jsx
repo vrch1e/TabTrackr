@@ -72,7 +72,6 @@ function App() {
 
   async function sendUserId() {
     const userId = await getUserId();
-    chrome.tabs.create({ url: "http://localhost:3010/" });
 
     if (!userId) {
       console.warn('no userId fdlsfjsldfjdslfjs');
@@ -80,9 +79,14 @@ function App() {
     }
 
     try {
-      const response = await fetch("http://localhost:3010/sessions/create")
-
-
+      const response = await fetch("http://localhost:3010/session/create", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ userId })
+      })
+      const { token } = await response.json()
+      console.log('TOKEN TOKEN TOKEN: ', token)
+      chrome.tabs.create({ url: `http://localhost:3010/homepage/${token}` });
     } catch (err) {
       console.error(err)
     }

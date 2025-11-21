@@ -14,6 +14,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
+        path: 'homepage/:token',
         Component: Homepage
       },
       {

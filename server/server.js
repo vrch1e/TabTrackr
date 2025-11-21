@@ -11,10 +11,15 @@ const app = express();
 const port = 3010;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const clientDist = path.join(__dirname, '../webapp-client/dist')
 app.use(cors({ origin: '*' }));
 app.use(express.json());
 app.use(router);
-app.use(express.static(path.join(__dirname, '../webapp-client/dist')))
+app.use(express.static(clientDist))
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(clientDist, 'index.html'))
+})
 
 // Create raw HTTP server
 const server = http.createServer(app);

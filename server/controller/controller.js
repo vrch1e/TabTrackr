@@ -74,13 +74,19 @@ const getFirstEntry = async (req, res) => {
 const createSession = async (req, res) => {
     const { userId } = req.body;
     const token = crypto.randomBytes(32).toString("hex");
+    try {
+        const redis = new Redis({
+            url: 'https://informed-mink-32248.upstash.io',
+            token: process.env.REDIS_TOKEN,
+        })
+        await redis.set(token, userId, {ex: 600})
+        res.status(200).json({ token })
+    } catch (err) {
+        console.log('fatass error with url or redis token, ', err)
+    }
 
-    const redis = new Redis({
-        url: 'https://informed-mink-32248.upstash.io',
-        token: process.env.REDIS_TOKEN,
-    })
-
-    await redis.set(token, userId, {ex: 600})
+    // await redis.set(token, userId, {ex: 600})
+    // res.status(200).json({ token })
 }
 
 const logVisit = async (req, res) => {
