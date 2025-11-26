@@ -1,6 +1,6 @@
 import TimeTracking from "../model/model.js";
 import sequelize from "../config/database.js";
-import { saveVisits } from './service.js';
+import service from './service.js';
 import { Op } from 'sequelize'
 import crypto from 'node:crypto'
 import { Redis } from '@upstash/redis'
@@ -76,10 +76,11 @@ const createSession = async (req, res) => {
     const token = crypto.randomBytes(32).toString("hex");
     try {
         const redis = new Redis({
-            url: 'https://informed-mink-32248.upstash.io',
+            url: process.env.REDIS_URL,
             token: process.env.REDIS_TOKEN,
         })
-        await redis.set(token, userId, {ex: 600})
+        await redis.set(token, userId, {ex: 2592000})
+        console.log('set token successfully: ', token)
         res.status(200).json({ token })
     } catch (err) {
         console.log('fatass error with url or redis token, ', err)
@@ -91,17 +92,18 @@ const createSession = async (req, res) => {
 
 const getUserId = async (req, res) => {
     const { token } = req.body;
+    console.log('token for getting userId: ', token)
     const redis = new Redis({
-        url: 'https://informed-mink-32248.upstash.io',
+        url: process.env.REDIS_URL,
         token: process.env.REDIS_TOKEN,
     })
-    const userId = await redis.get(token);
+    let userId = await redis.get(token);
     res.status(200).json({ userId })
 }
 
 const logVisit = async (req, res) => {
   try {
-    await saveVisits(req.body.usage);
+    await service.saveVisits(req.body.usage);
     console.log('successful log query');
     res.status(201).json({ msg: "Visits logged" });
   } catch (err) {

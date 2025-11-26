@@ -1,6 +1,6 @@
 import express from 'express';
 import router from './router.js';
-import { saveVisits } from './controller/service.js'
+import service from './controller/service.js'
 import { WebSocketServer } from 'ws';
 import cors from 'cors';
 import http from 'http';
@@ -54,7 +54,7 @@ wss.on('connection', (ws) => { // When there's a websocket connection with the c
         }
       }
        
-      saveVisits(usageDataToLog); // log session usage data to db
+      service.saveVisits(usageDataToLog); // log session usage data to db
 
       wss.clients.forEach(client => {
         if (client !== ws && client.readyState === WebSocket.OPEN) {

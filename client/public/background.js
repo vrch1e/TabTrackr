@@ -1,18 +1,52 @@
-// Load the user ID from storage
-chrome.storage.local.get(['userId'], (result) => {
-  let userId = result.userId;
+let userId, token, expiresAt;
 
-  if (!userId) {
-    // Generate a new UUID if it doesn't exist
-    userId = crypto.randomUUID();
-    chrome.storage.local.set({ userId }, () => {
-      backgroundInit(userId);
-      console.log('Generated new UUID for user:', userId);
-    });
-  } else {
-    console.log('Existing UUID found:', userId);
-    backgroundInit(userId);
+chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
+  if (req.type === "GET_AUTH_TOKEN") {
+    console.log('token being sent from service worker: ', token);
+    if (token) {
+      sendResponse({ token });
+    } else {
+      sendResponse({ token_undefined: 'token undefined' });
+    }
+    return true;
   }
+  if (req.type === "OPEN_APP") {
+    console.log('app opened')
+    chrome.tabs.create({ url: "http://localhost:5173/homepage" })
+  }
+  return 'app_has_been_opened';
+})
+
+// Load the user ID from storage
+chrome.storage.local.get(['userId', 'token', 'expiresAt'],  async (result) => {
+  userId = result.userId;
+  token = result.token;
+  expiresAt = result.expiresAt;
+  const now = Date.now()
+  
+  console.log('token variable set in service worker!')
+
+  if (!token || !expiresAt || now > expiresAt) {
+    // Generate a new token if it doesn't exist
+    userId = userId || crypto.randomUUID();
+    expiresAt = now + 30 * 24 * 60 * 60 * 1000; // 30 days
+
+    const response = await fetch('http://localhost:3010/session/create', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ userId })
+    })
+
+    const data = await response.json();
+    token = data.token;
+
+    await chrome.storage.local.set({ userId, token, expiresAt });
+    console.log('set token in background.js, ', token);
+  } else {
+    console.log('token already exists!, ', token);
+  }
+  
+  backgroundInit(userId);
 
 });
 
@@ -72,7 +106,7 @@ function backgroundInit(userId) {
     chrome.tabs.get(activeInfo.tabId, function(tab) { // full tab object passed into callback function by chrome api
       currentUrl = tab.url;
       startSiteTimer()
-      console.log('new tab: ', currentUrl)
+      // console.log('new tab: ', currentUrl)
     });
   });
 
@@ -94,7 +128,7 @@ function backgroundInit(userId) {
         if (currentUrl) {
           updateSession(currentUrl)
           siteTimer = null;
-          console.log('focus out of chrome')
+          // console.log('focus out of chrome')
         }
       } else {
       // browser gained focus → find current tab
@@ -102,7 +136,7 @@ function backgroundInit(userId) {
         if (tabs.length) {
           currentUrl = tabs[0].url;
           startSiteTimer()
-          console.log('focus into chrome')
+          // console.log('focus into chrome')
         }
       });
     }
@@ -122,11 +156,12 @@ function backgroundInit(userId) {
 
     console.log('chrome closed, session sent:', thisSession)
     thisSession = {'usage': {}, 'usageId': userId}
+    return;
   })
 
   setInterval(() => {
     websocket.send(JSON.stringify(thisSession))
-    console.log('15 secs up, session sent:', thisSession['usage'])
+    // console.log('15 secs up, session sent:', thisSession['usage'])
     thisSession = {'usage': {}, 'userId': userId}
   }, 15000)
 }

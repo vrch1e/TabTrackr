@@ -19,5 +19,9 @@
     "background": {
         "service_worker": "background.js",
         "type": "module"
-    }
+    },
+    "content_scripts": [{
+      "matches": ["http://localhost:5173/*", "http://localhost:3010/*"],
+      "js": ["content-script.js"]
+    }]
 }

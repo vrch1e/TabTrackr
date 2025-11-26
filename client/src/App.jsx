@@ -9,6 +9,7 @@ function App() {
   const [allTime, setAllTime] = useState(0);
   const [period, setPeriod] = useState("today");
   const [daysDownloaded, setDaysDownloaded] = useState(0)
+  console.log("POPUP LOADED");
 
   async function getUserId() {
     return new Promise((resolve, reject) => {
@@ -70,32 +71,17 @@ function App() {
     })
   }, [])
 
-  async function sendUserId() {
-    const userId = await getUserId();
-
-    if (!userId) {
-      console.warn('no userId fdlsfjsldfjdslfjs');
-      return;
-    }
-
+  function openWebsite() {
     try {
-      const response = await fetch("http://localhost:3010/session/create", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ userId })
-      })
-      const { token } = await response.json()
-      console.log('TOKEN TOKEN TOKEN: ', token)
-      chrome.tabs.create({ url: `http://localhost:3010/homepage/${token}` });
+      chrome.runtime.sendMessage({ type: "OPEN_APP" })
     } catch (err) {
       console.error(err)
     }
-
   }
 
   return (
     <div id="container">
-      <div id="weblink" onClick={sendUserId}><a className="anchortext">Ascend your productivity</a><p>&nbsp;&gt;:)</p></div>
+      <div id="weblink" onClick={openWebsite}><span className="anchortext">Ascend your productivity</span><p>&nbsp;&gt;:)</p></div>
       <header id="dashboard">
         <h1>Time Tracked</h1>
         <PeriodDropdown period={period} setPeriod={setPeriod} daysDownloaded={daysDownloaded} />
