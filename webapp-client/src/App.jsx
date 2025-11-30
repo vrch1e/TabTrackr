@@ -1,45 +1,45 @@
 import './App.css'
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { updateToken } from './features/tokenUpdater/counterSlice'
+import { updateSites } from './features/sitesUpdater/sitesSlice'
 import Dashboard from './components/Dashboard'
 import Homepage from './components/Homepage'
 import { Outlet } from 'react-router'
 
 function App() {
-  
-  const authToken = useSelector((state) => state.auth.token)
+  const [tabs, setTabs] = useState([]);
+
+  const siteTabs = useSelector((state) => state.sites.sites)
   console.log('app.jsx rendered')
   const dispatch = useDispatch()
 
   useEffect(() => {
-    console.log('authToken from redux: ', authToken);
-
-    function listener(event) {
-      if (event.data.type !== 'RECEIVE_AUTH_TOKEN') return;
-      const token = event.data.token;
-      console.log('token received from content_script: ', token);
-      dispatch(updateToken(token));
-    }
-
-    function contentScriptListener(event) {
-      if (event.data.type !== "CONTENT_SCRIPT_RUNNING") return;
-      window.postMessage({ type: "REQUEST_AUTH_TOKEN" });
-    }
-
-    window.addEventListener("message", listener);
-    window.addEventListener("message", contentScriptListener)
-
-    return () => {
-      window.removeEventListener("message", listener)
-      window.removeEventListener("message", contentScriptListener)
+    const handle = (event) => {
+        if (event.data?.type === "CONTENT_SCRIPT_RUNNING") {
+          window.postMessage({ type: "REQUEST_SITE_TABS" });
+          console.log('posted a message')
+        }
+        if (event.data?.type === "RECEIVE_SITE_TABS") {
+          console.log('received message with sites')
+          setTabs(event.data.sites);
+          dispatch(updateSites(event.data.sites));
+          console.log('sites', event.data.sites);
+        }
     };
 
-  }, [])
+    window.addEventListener("message", handle);
+
+    // Fire request in case CS is already ready:
+    window.postMessage({ type: "REQUEST_SITE_TABS" });
+
+    return () => {
+        window.removeEventListener("message", handle);
+    };
+  }, []);
 
   useEffect(() => {
-    console.log("AUTH TOKEN UPDATED:", authToken);
-  }, [authToken]);
+    console.log("siteTabs updated:", siteTabs);
+  }, [siteTabs]);
 
   return (
     <>

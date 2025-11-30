@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
-import tokenReducer from '../features/tokenUpdater/counterSlice'
+import siteReducer from '../features/sitesUpdater/sitesSlice'
 
 export default configureStore({
-  reducer: {auth: tokenReducer},
+  reducer: {sites: siteReducer},
 })

@@ -1,21 +1,23 @@
+import services from "./bgservices.js";
+
 let userId, token, expiresAt;
 
-chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
-  if (req.type === "GET_AUTH_TOKEN") {
-    console.log('token being sent from service worker: ', token);
-    if (token) {
-      sendResponse({ token });
-    } else {
-      sendResponse({ token_undefined: 'token undefined' });
-    }
+chrome.runtime.onMessage.addListener( (req, sender, sendResponse) => {
+  if (req.type === "GET_SITE_TABS") {
+    services.getSites('today', userId).then(sites => {
+      sendResponse({sites})
+    })
+    // sendResponse({ sites });
     return true;
   }
   if (req.type === "OPEN_APP") {
     console.log('app opened')
     chrome.tabs.create({ url: "http://localhost:5173/homepage" })
   }
-  return 'app_has_been_opened';
+  return true;
 })
+
+
 
 // Load the user ID from storage
 chrome.storage.local.get(['userId', 'token', 'expiresAt'],  async (result) => {
@@ -48,7 +50,7 @@ chrome.storage.local.get(['userId', 'token', 'expiresAt'],  async (result) => {
   
   backgroundInit(userId);
 
-});
+})
 
 function backgroundInit(userId) {
   let thisSession = {'usage': {}, 'userId': userId}

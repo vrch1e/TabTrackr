@@ -1,42 +1,22 @@
 import './Homepage.css'
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { updateSites } from '../features/sitesUpdater/sitesSlice';
+import services from '../services/services';
+import TabList from './TabList';
 
 export default function Homepage() {
     const [search, setSearch] = useState('')
-
-    const authToken = useSelector((state) => state.auth.token)
-    console.log('app.jsx rendered')
+    const [tabs, setTabs] = useState([])
+    const [allTime, setAllTime] = useState(0)
+    const [period, setPeriod] = useState('today')
+    const siteTabs = useSelector((state) => state.sites.sites)
     const dispatch = useDispatch()
 
     useEffect(() => {
-        console.log('authToken from redux: ', authToken);
+        console.log('sites in homepage: ', siteTabs)
 
-        function listener(event) {
-            if (event.data.type !== 'RECEIVE_AUTH_TOKEN') return;
-            const token = event.data.token;
-            console.log('token received from content_script: ', token);
-            dispatch(updateToken(token));
-        }
-
-        function contentScriptListener(event) {
-            if (event.data.type !== "CONTENT_SCRIPT_RUNNING") return;
-            window.postMessage({ type: "REQUEST_AUTH_TOKEN" });
-        }
-
-        window.addEventListener("message", listener);
-        window.addEventListener("message", contentScriptListener)
-
-        return () => {
-            window.removeEventListener("message", listener)
-            window.removeEventListener("message", contentScriptListener)
-        };
-
-    }, [])
-
-    useEffect(() => {
-        console.log("AUTH TOKEN UPDATED:", authToken);
-    }, [authToken]);
+    }, [period])
 
     return (
         <>
@@ -54,7 +34,7 @@ export default function Homepage() {
                     <input id="websearch" type="text" placeholder="Search Websites..." />
                 </div>
             </div>
-            <h1>{authToken}</h1>
+            <TabList tabs={siteTabs} />
         </div>
         </>
     )
