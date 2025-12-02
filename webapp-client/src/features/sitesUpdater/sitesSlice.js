@@ -3,11 +3,19 @@ import { createSlice } from '@reduxjs/toolkit'
 export const sitesSlice = createSlice({
   name: 'sites',
   initialState: {
-    sites: [],
+    sitesToday: [],
+    sitesWeek: [],
+    sitesMonth: [],
+    sitesAllTime: [],
   },
   reducers: {
     updateSites: (state, action) => {
-      state.sites = action.payload;
+      const { sitesToday, sitesWeek, sitesMonth, sitesAllTime } = action.payload;
+      console.log('sitesToday in redux: ', sitesToday);
+      state.sitesToday = sitesToday;
+      state.sitesWeek = sitesWeek;
+      state.sitesMonth = sitesMonth;
+      state.sitesAllTime = sitesAllTime;
     },
   },
 })

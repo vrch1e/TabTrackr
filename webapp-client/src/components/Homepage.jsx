@@ -10,13 +10,23 @@ export default function Homepage() {
     const [tabs, setTabs] = useState([])
     const [allTime, setAllTime] = useState(0)
     const [period, setPeriod] = useState('today')
-    const siteTabs = useSelector((state) => state.sites.sites)
+    const siteTabsToday = useSelector((state) => state.sites.sitesToday)
+    const siteTabsWeek = useSelector((state) => state.sites.sitesWeek)
+    const siteTabsMonth = useSelector((state) => state.sites.sitesMonth)
+    const siteTabsAllTime = useSelector((state) => state.sites.sitesAllTime)
     const dispatch = useDispatch()
 
     useEffect(() => {
-        console.log('sites in homepage: ', siteTabs)
+        console.log('a test log, does this run on mount?', siteTabsToday)
+        const lookup = {
+            today: siteTabsToday,
+            week: siteTabsWeek,
+            month: siteTabsMonth,
+            all: siteTabsAllTime
+        };
 
-    }, [period])
+        setTabs(lookup[period]);
+    }, [period, siteTabsToday, siteTabsWeek, siteTabsMonth, siteTabsAllTime])
 
     return (
         <>
@@ -33,9 +43,28 @@ export default function Homepage() {
                     </svg>
                     <input id="websearch" type="text" placeholder="Search Websites..." />
                 </div>
+                <PeriodDropdown period={period} setPeriod={setPeriod} daysDownloaded={80}/>
             </div>
-            <TabList tabs={siteTabs} />
+            <TabList tabs={tabs} />
         </div>
         </>
     )
+}
+
+function PeriodDropdown({ period, setPeriod, daysDownloaded }) {
+  return (
+    <div className="period-dropdown">
+      <select
+        id="period"
+        className="period-select"
+        value={period}
+        onChange={(e) => setPeriod(e.target.value)}
+      >
+        <option value="today">Today</option>
+        <option value="week">This Week</option>
+        <option value="month">This Month</option>
+        <option value="all">All Time{daysDownloaded ? `: ${daysDownloaded} days` : ""}</option>
+      </select>
+    </div>
+  );
 }

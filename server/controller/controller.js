@@ -49,6 +49,65 @@ const getStats = async (req, res) => {
     res.status(200).json(visits);
 };
 
+const getAllStats = async (req, res) => {
+    const { period, userId, timezone } = req.params;
+    let timeFrameToday, timeFrameWeek, timeFrameMonth, timeFrameAllTime;
+    let sitesObject = {}
+
+    let date = new Date()
+    let ms = (
+        (date.getHours() * 3600) +
+        (date.getMinutes() * 60) +
+        date.getSeconds()
+    ) * 1000;
+
+    // if (period === 'today') {
+    timeFrameToday = date - ms;
+    // } else if (period === 'week') {
+    timeFrameWeek = date - 7 * 24 * 60 * 60 * 1000;
+    // } else if (period === 'month') {
+    timeFrameMonth = date - 30 * 24 * 60 * 60 * 1000;
+    // } else if (period === 'all') {
+    timeFrameAllTime = 0;
+    // } else {
+    //     return res.status(400).json({ error: "Invalid period" });
+    // }
+
+    let timeArr = [timeFrameToday, timeFrameWeek, timeFrameMonth, timeFrameAllTime]
+    // Sum up timespent for each site within the timeframe
+    for (let i = 0; i < timeArr.length; i++) {
+        const visits = await TimeTracking.findAll({
+            where: {
+                createdAt: { [Op.gte]: new Date(timeArr[i]) },
+                userId
+            },
+            attributes: [
+                'site', 
+                [sequelize.fn('SUM', sequelize.col('timespent')), 'totalTimeSpent']
+            ],
+            group: ['site'],
+            order: [[sequelize.fn('SUM', sequelize.col('timespent')), 'DESC']],
+            raw: true
+        });
+
+        switch(i) {
+            case 0:
+                sitesObject["sitesToday"] = visits;
+                break;
+            case 1:
+                sitesObject["sitesWeek"] = visits;
+                break;
+            case 2:
+                sitesObject["sitesMonth"] = visits;
+                break;
+            case 3:
+                sitesObject["sitesAllTime"] = visits;
+        }
+    }
+
+    res.status(200).json(sitesObject);
+};
+
 const getFirstEntry = async (req, res) => {
 
     const { userId } = req.params;
@@ -123,4 +182,4 @@ const testEc2 = async (req, res) => {
     res.json({"success": "success"})
 }
 
-export default { getStats, getFirstEntry, logVisit, clearAll, testEc2, createSession, getUserId }
+export default { getStats, getAllStats, getFirstEntry, logVisit, clearAll, testEc2, createSession, getUserId }

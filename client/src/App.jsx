@@ -9,7 +9,6 @@ function App() {
   const [allTime, setAllTime] = useState(0);
   const [period, setPeriod] = useState("today");
   const [daysDownloaded, setDaysDownloaded] = useState(0)
-  console.log("POPUP LOADED");
 
   async function getUserId() {
     return new Promise((resolve, reject) => {

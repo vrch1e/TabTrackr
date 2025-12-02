@@ -2,17 +2,19 @@
     display: flex;
     flex-direction: column;
     background-color: #1111;
-    width: 100%;
+    flex: 1;
 }
 
 /* Top bar container */
 .searchbar-container {
     display: flex;
     align-items: center;
-    justify-content: center;
-    background-color: #0d0d0d;
-    width: 100%;
+    background-color: #111111;
     height: 20vh;
+    margin-top: 1rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    border-radius: 10px;
 }
 
 /* Search bar wrapper (keeps icon positioned nicely) */
@@ -37,8 +39,7 @@
 
 /* Focus state */
 #websearch:focus {
-    /* border: 2px solid #33f6c9; vibrant color */
-    box-shadow: 0 0 10px #33f6c9;
+    border: 1px solid #33f6c9;
 }
 
 /* Icon stays locked to left side of bar */
@@ -60,6 +61,7 @@
     border: 1px solid grey;
     background-color: #3b3b3b;
     margin-right: 20px;
+    margin-left: 5rem;
 }
 
 #back-button-icon {
@@ -70,4 +72,44 @@
 
 #back-button:hover {
     border: 1px solid #33f6c9;
+}
+
+.period-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.period-label {
+  font-size: 0.85rem;
+  color: #a0a0a0; /* soft grey for subtlety */
+  font-weight: 500;
+}
+
+/* Dropdown select styling */
+.period-select {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid grey;
+  background-color: #111111;
+  color: #e6e6e6;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  outline: none;
+  transition: 0.2s ease-in-out;
+  box-shadow: 0 4px 20px rgba(59, 179, 164, 0.08);
+  height: 3.5rem;
+  margin-left: 6rem;
+  margin-top: 0.5rem;
+}
+
+/* .period-select:hover {
+  background-color: #1a1a1a;
+  border-color: #3bb3a4;
+} */
+
+.period-select:focus {
+  border-color: #3bb3a4;
+  box-shadow: 0 0 6px rgba(59, 179, 164, 0.3);
 }

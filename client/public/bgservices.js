@@ -16,6 +16,23 @@ const getSites = async (period, userId) => {
     }
 }
 
+const getAllSites = async (userId) => {
+    const url = `http://localhost:3010/allStats/${userId}`
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`Response status: ${response.status}`);
+        }
+    
+        const json = await response.json();
+        console.log(json);
+        return json;
+        
+    } catch (error) {
+        console.error(error.message);
+    }
+}
+
 const getFirstEntry = async (userId) => {
     const url = `http://localhost:3010/firstentry/${userId}`
 
@@ -40,4 +57,4 @@ const postSites = async () => {
 
 }
 
-export default { getSites, postSites, getFirstEntry }
+export default { getSites, getAllSites, postSites, getFirstEntry }

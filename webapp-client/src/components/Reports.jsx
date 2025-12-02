@@ -7,7 +7,7 @@ export default function Reports() {
     return (
         <>
         <h1>This is the Reports page</h1>
-        <h2>{siteTabs}</h2>
+        <h2>yuh</h2>
         </>
     )
 }

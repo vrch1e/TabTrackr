@@ -7,9 +7,7 @@ import Homepage from './components/Homepage'
 import { Outlet } from 'react-router'
 
 function App() {
-  const [tabs, setTabs] = useState([]);
 
-  const siteTabs = useSelector((state) => state.sites.sites)
   console.log('app.jsx rendered')
   const dispatch = useDispatch()
 
@@ -17,13 +15,10 @@ function App() {
     const handle = (event) => {
         if (event.data?.type === "CONTENT_SCRIPT_RUNNING") {
           window.postMessage({ type: "REQUEST_SITE_TABS" });
-          console.log('posted a message')
         }
         if (event.data?.type === "RECEIVE_SITE_TABS") {
-          console.log('received message with sites')
-          setTabs(event.data.sites);
+          console.log('sites sent to dispatch: ', event.data.sites)
           dispatch(updateSites(event.data.sites));
-          console.log('sites', event.data.sites);
         }
     };
 
@@ -36,10 +31,6 @@ function App() {
         window.removeEventListener("message", handle);
     };
   }, []);
-
-  useEffect(() => {
-    console.log("siteTabs updated:", siteTabs);
-  }, [siteTabs]);
 
   return (
     <>

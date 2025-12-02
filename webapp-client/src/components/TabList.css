@@ -6,13 +6,20 @@
   padding: 16px;
   background-color: #0d0d0d; /* smoky black */
   border-radius: 12px;
-  border: 1px solid #1f1f1f; /* subtle structure */
+  border: 0.5px solid #33f6c9; /* subtle structure */
   box-shadow: 0 4px 20px rgba(59, 179, 164, 0.08); /* teal-tinted shadow */
   color: #e6e6e6;
   transition: all 0.25s ease;
+  overflow-y: scroll;
+  height: 70vh;
+  margin-left: 2rem;
+  margin-top: 2rem;
+  scrollbar-width: none; 
+  -ms-overflow-style: none; 
+  /* box-shadow: 0 7px 20px rgba(59, 179, 164, 0.08); */
 }
 
-/* #container:hover {
-  border-color: #3bb3a4;
-  box-shadow: 0 0 12px rgba(59, 179, 164, 0.15);
-} */
+.container::-webkit-scrollbar {
+  display: none;
+}
+

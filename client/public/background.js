@@ -4,10 +4,9 @@ let userId, token, expiresAt;
 
 chrome.runtime.onMessage.addListener( (req, sender, sendResponse) => {
   if (req.type === "GET_SITE_TABS") {
-    services.getSites('today', userId).then(sites => {
-      sendResponse({sites})
+    services.getAllSites(userId).then(sites => {
+      sendResponse({ sites })
     })
-    // sendResponse({ sites });
     return true;
   }
   if (req.type === "OPEN_APP") {
@@ -16,8 +15,6 @@ chrome.runtime.onMessage.addListener( (req, sender, sendResponse) => {
   }
   return true;
 })
-
-
 
 // Load the user ID from storage
 chrome.storage.local.get(['userId', 'token', 'expiresAt'],  async (result) => {
