@@ -39,13 +39,12 @@ const getStats = async (req, res) => {
         },
         attributes: [
             'site', 
-            [sequelize.fn('SUM', sequelize.col('timespent')), 'totalTimeSpent']
+            [sequelize.fn('SUM', sequelize.col('timespent')), 'totalTimeSpent'],
         ],
         group: ['site'],
         order: [[sequelize.fn('SUM', sequelize.col('timespent')), 'DESC']],
         raw: true
     });
-
     res.status(200).json(visits);
 };
 

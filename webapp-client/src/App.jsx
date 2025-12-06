@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { updateSites } from './features/sitesUpdater/sitesSlice'
 import Dashboard from './components/Dashboard'
-import Homepage from './components/Homepage'
+import Homepage from './components/homepage-components/Homepage'
 import { Outlet } from 'react-router'
 
 function App() {

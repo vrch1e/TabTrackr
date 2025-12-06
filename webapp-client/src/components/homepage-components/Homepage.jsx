@@ -1,14 +1,13 @@
 import './Homepage.css'
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateSites } from '../features/sitesUpdater/sitesSlice';
-import services from '../services/services';
+import { updateSites } from '../../features/sitesUpdater/sitesSlice';
+import services from '../../services/services';
 import TabList from './TabList';
+import GeneralStatsList from './generalStatsList';
 
 export default function Homepage() {
-    const [search, setSearch] = useState('')
     const [tabs, setTabs] = useState([])
-    const [allTime, setAllTime] = useState(0)
     const [period, setPeriod] = useState('today')
     const siteTabsToday = useSelector((state) => state.sites.sitesToday)
     const siteTabsWeek = useSelector((state) => state.sites.sitesWeek)
@@ -17,15 +16,14 @@ export default function Homepage() {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        console.log('a test log, does this run on mount?', siteTabsToday)
         const lookup = {
-            today: siteTabsToday,
-            week: siteTabsWeek,
-            month: siteTabsMonth,
-            all: siteTabsAllTime
+            today: [siteTabsToday, 1],
+            week: [siteTabsWeek, 7],
+            month: [siteTabsMonth, 30],
+            all: [siteTabsAllTime, 92]
         };
 
-        setTabs(lookup[period]);
+        setTabs(lookup[period][0]);
     }, [period, siteTabsToday, siteTabsWeek, siteTabsMonth, siteTabsAllTime])
 
     return (
@@ -33,19 +31,22 @@ export default function Homepage() {
         <div className="homepage-container">
             <div className="searchbar-container">
                 <div id="back-button">
-                    <svg id="back-button-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 40 40" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                    <svg id="back-button-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 40 40" strokeWidth={1} stroke="currentColor" className="size-7">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
                     </svg>
                 </ div>
                 <div className="searchbar-wrapper">
-                    <svg id='searchicon' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 40 40" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                    <svg id='searchicon' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 40 40" strokeWidth={1} stroke="currentColor" className="size-7">
                     <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                     </svg>
                     <input id="websearch" type="text" placeholder="Search Websites..." />
                 </div>
                 <PeriodDropdown period={period} setPeriod={setPeriod} daysDownloaded={80}/>
             </div>
-            <TabList tabs={tabs} />
+            <div id="homepage-insights-container">
+              <GeneralStatsList period={period} />
+              <TabList period={period} tabs={tabs} />
+            </div>
         </div>
         </>
     )

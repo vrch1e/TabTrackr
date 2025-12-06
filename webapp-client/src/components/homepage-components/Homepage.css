@@ -10,7 +10,8 @@
     display: flex;
     align-items: center;
     background-color: #111111;
-    height: 20vh;
+    border-bottom: 1.5px solid #474747; 
+    height: 14vh;
     margin-top: 1rem;
     margin-left: 1rem;
     margin-right: 1rem;
@@ -21,7 +22,7 @@
 .searchbar-wrapper {
     position: relative;
     width: 70%;
-    height: 30%;
+    height: 45px;
 }
 
 /* Search input */
@@ -29,7 +30,7 @@
     width: 100%;
     height: 100%;
     border-radius: 2em;
-    font-size: 20px;
+    font-size: 16px;
     color: rgb(158, 158, 158);
     padding-left: 7vh;
     border: 1px solid grey; /* matches icon color */
@@ -45,8 +46,10 @@
 /* Icon stays locked to left side of bar */
 #searchicon {
     position: absolute;
-    left: 1.8vh;
-    top: 71%;
+    left: 1.4vh;
+    top: 74%;
+    width: 45px;
+    height: 45px;
     transform: translateY(-50%);
     color: rgb(175, 175, 182);
     font-size: 22px;
@@ -54,9 +57,8 @@
 }
 
 #back-button {
-    position: relative;
-    height: 57px;
-    width: 57px;
+    height: 45px;
+    width: 45px;
     border-radius: 100%;
     border: 1px solid grey;
     background-color: #3b3b3b;
@@ -65,8 +67,10 @@
 }
 
 #back-button-icon {
-    margin-top: 13px;
-    margin-left: 13px;
+    margin-top: 10px;
+    margin-left: 9.8px;
+    height: 40px;
+    width: 40px;
     color: rgb(175, 175, 182);
 }
 
@@ -93,14 +97,15 @@
   border: 1px solid grey;
   background-color: #111111;
   color: #e6e6e6;
-  font-size: 1.1rem;
+  font-size: 16px;
   font-weight: 500;
   cursor: pointer;
   outline: none;
   transition: 0.2s ease-in-out;
   box-shadow: 0 4px 20px rgba(59, 179, 164, 0.08);
-  height: 3.5rem;
-  margin-left: 6rem;
+  height: 45px;
+  margin-left: 5rem;
+  margin-right: 5rem;
   margin-top: 0.5rem;
 }
 
@@ -112,4 +117,9 @@
 .period-select:focus {
   border-color: #3bb3a4;
   box-shadow: 0 0 6px rgba(59, 179, 164, 0.3);
+}
+
+#homepage-insights-container {
+  display: flex;
+  flex-direction: row;
 }

@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import store from './app/store.js';
 import { Provider } from 'react-redux';
-import Homepage from './components/Homepage.jsx';
+import Homepage from './components/homepage-components/Homepage.jsx';
 import Reports from './components/Reports.jsx';
 import App from './App.jsx';
 import './index.css';
