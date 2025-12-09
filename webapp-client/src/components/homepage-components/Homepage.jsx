@@ -13,18 +13,20 @@ export default function Homepage() {
     const siteTabsWeek = useSelector((state) => state.sites.sitesWeek)
     const siteTabsMonth = useSelector((state) => state.sites.sitesMonth)
     const siteTabsAllTime = useSelector((state) => state.sites.sitesAllTime)
+    const totalDays = useSelector((state) => state.sites.totalDays)
     const dispatch = useDispatch()
 
     useEffect(() => {
-        const lookup = {
-            today: [siteTabsToday, 1],
-            week: [siteTabsWeek, 7],
-            month: [siteTabsMonth, 30],
-            all: [siteTabsAllTime, 92]
-        };
+      console.log('total days in frontend: ', totalDays)
+      const lookup = {
+          today: [siteTabsToday, 1],
+          week: [siteTabsWeek, 7],
+          month: [siteTabsMonth, 30],
+          all: [siteTabsAllTime, totalDays]
+      };
 
-        setTabs(lookup[period][0]);
-    }, [period, siteTabsToday, siteTabsWeek, siteTabsMonth, siteTabsAllTime])
+      setTabs(lookup[period][0]);
+    }, [period, siteTabsToday, siteTabsWeek, siteTabsMonth, siteTabsAllTime, totalDays])
 
     return (
         <>
@@ -41,7 +43,7 @@ export default function Homepage() {
                     </svg>
                     <input id="websearch" type="text" placeholder="Search Websites..." />
                 </div>
-                <PeriodDropdown period={period} setPeriod={setPeriod} daysDownloaded={80}/>
+                <PeriodDropdown period={period} setPeriod={setPeriod} daysDownloaded={totalDays}/>
             </div>
             <div id="homepage-insights-container">
               <GeneralStatsList period={period} />

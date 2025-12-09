@@ -8,6 +8,10 @@ chrome.runtime.onMessage.addListener( (req, sender, sendResponse) => {
       sendResponse({ sites })
     })
     return true;
+  } else if (req.type === "GET_TOTAL_DAYS") {
+    services.getFirstEntry(userId).then(totalDays => {
+      sendResponse({ totalDays })
+    })
   }
   if (req.type === "OPEN_APP") {
     console.log('app opened')

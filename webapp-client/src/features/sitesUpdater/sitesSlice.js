@@ -7,6 +7,7 @@ export const sitesSlice = createSlice({
     sitesWeek: [],
     sitesMonth: [],
     sitesAllTime: [],
+    totalDays: 0,
   },
   reducers: {
     updateSites: (state, action) => {
@@ -17,10 +18,15 @@ export const sitesSlice = createSlice({
       state.sitesMonth = sitesMonth;
       state.sitesAllTime = sitesAllTime;
     },
+    updateTotalDays: (state, action) => {
+      const totalDays = action.payload.totalDaysUsing;
+      console.log('total days reducer activated: ', totalDays)
+      state.totalDays = totalDays;
+    }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { updateSites } = sitesSlice.actions
+export const { updateSites, updateTotalDays } = sitesSlice.actions
 
 export default sitesSlice.reducer

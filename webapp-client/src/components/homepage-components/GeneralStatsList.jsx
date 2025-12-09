@@ -8,6 +8,7 @@ export default function GeneralStatsList({ period }) {
     const siteTabsWeek = useSelector((state) => state.sites.sitesWeek)
     const siteTabsMonth = useSelector((state) => state.sites.sitesMonth)
     const siteTabsAllTime = useSelector((state) => state.sites.sitesAllTime)
+    const totalDays = useSelector((state) => state.sites.totalDays)
     const [dailyAvgTime, setDailyAvgTime] = useState('')
     const [totalTime, setTotalTime] = useState('')
 
@@ -18,7 +19,7 @@ export default function GeneralStatsList({ period }) {
             today: [siteTabsToday, 1],
             week: [siteTabsWeek, 7],
             month: [siteTabsMonth, 30],
-            all: [siteTabsAllTime, ]
+            all: [siteTabsAllTime, totalDays],
         };
 
         let addedTime = 0;
@@ -37,7 +38,7 @@ export default function GeneralStatsList({ period }) {
         setDailyAvgTime(formatTime(addedTime / lookup[period][1]));
         setTotalTime(formatTime(addedTime));
 
-    }, [period, siteTabsToday, siteTabsWeek, siteTabsMonth, siteTabsAllTime])
+    }, [period, siteTabsToday, siteTabsWeek, siteTabsMonth, siteTabsAllTime, totalDays])
 
     return (
         <>

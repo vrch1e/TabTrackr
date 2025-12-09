@@ -29,6 +29,7 @@ export default function TabList({ period, tabs = [] }) {
                 <h2>Total Time</h2>
                 <h2>{formatTime(totalTime)}</h2>
             </div>
+            <hr></hr>
             {tabs.length > 0 ? (
                 tabs.map((tab) => (
                     <TabItem key={tab.site} site={tab.site} timespent={formatTime(tab.totalTimeSpent)} />
